@@ -17,7 +17,7 @@ export default function DashboardOverview() {
         { label: "TOTAL DELIVERYS", value: "0", icon: Package, color: "text-primary", bg: "bg-primary/5" },
         { label: "ACTIVE SYNC", value: "0", icon: Activity, color: "text-primary", bg: "bg-primary/5" },
         { label: "VERIFIED OFFICES", value: "0", icon: CheckCircle, color: "text-primary", bg: "bg-primary/5" },
-        { label: "EXCEPTIONS", value: "0", icon: AlertCircle, color: "text-red-500", bg: "bg-red-50" },
+        { label: "EXCEPTIONS", value: "0", icon: AlertCircle, color: "text-teal-500", bg: "bg-teal-50" },
     ]);
     const [recentShipments, setRecentShipments] = useState<Shipment[]>([]);
 
@@ -25,7 +25,7 @@ export default function DashboardOverview() {
         if (typeof window === "undefined") return;
 
         const timer = setTimeout(() => {
-            const saved = localStorage.getItem("transglologistics_shipments") || localStorage.getItem("transglologistics_shipments");
+            const saved = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
             const shipments: Shipment[] = saved ? JSON.parse(saved) : [];
 
             const total = shipments.length;
@@ -37,7 +37,7 @@ export default function DashboardOverview() {
                 { label: "TOTAL SHIPMENTS", value: total.toLocaleString(), icon: Package, color: "text-primary", bg: "bg-primary/5" },
                 { label: "IN TRANSIT", value: inDelivery.toLocaleString(), icon: Activity, color: "text-primary", bg: "bg-primary/5" },
                 { label: "DELIVERED", value: delivered.toLocaleString(), icon: CheckCircle, color: "text-primary", bg: "bg-primary/5" },
-                { label: "HELD / ISSUES", value: exceptions.toLocaleString(), icon: AlertCircle, color: "text-red-500", bg: "bg-red-50" },
+                { label: "HELD / ISSUES", value: exceptions.toLocaleString(), icon: AlertCircle, color: "text-teal-500", bg: "bg-teal-50" },
             ]);
 
             setRecentShipments(shipments.slice(-5).reverse());

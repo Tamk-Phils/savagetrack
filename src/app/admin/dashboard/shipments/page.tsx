@@ -38,7 +38,7 @@ export default function ShipmentsList() {
 
     const loadShipments = async () => {
         // Optimistic Load
-        const cached = localStorage.getItem("transglologistics_shipments") || localStorage.getItem("transglologistics_shipments");
+        const cached = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
         if (cached) {
             setShipments(JSON.parse(cached) as Shipment[]);
         }
@@ -59,7 +59,7 @@ export default function ShipmentsList() {
 
             if (data) {
                 setShipments(data as Shipment[]);
-                localStorage.setItem("transglologistics_shipments", JSON.stringify(data));
+                localStorage.setItem("vanguardfreight_shipments", JSON.stringify(data));
             }
         } catch (err: any) {
             clearTimeout(timeoutId);
@@ -89,7 +89,7 @@ export default function ShipmentsList() {
                 return s;
             });
             setShipments(updated);
-            localStorage.setItem("transglologistics_shipments", JSON.stringify(updated));
+            localStorage.setItem("vanguardfreight_shipments", JSON.stringify(updated));
         } catch (err) {
             console.error(err);
             alert("Failed to archive transit.");
@@ -110,7 +110,7 @@ export default function ShipmentsList() {
                 return s;
             });
             setShipments(updated);
-            localStorage.setItem("transglologistics_shipments", JSON.stringify(updated));
+            localStorage.setItem("vanguardfreight_shipments", JSON.stringify(updated));
             alert(`Delivery ${id} restored successfully.`);
         } catch (err) {
             console.error(err);
@@ -175,12 +175,12 @@ export default function ShipmentsList() {
             });
 
             setShipments(updatedShipments);
-            localStorage.setItem("transglologistics_shipments", JSON.stringify(updatedShipments));
+            localStorage.setItem("vanguardfreight_shipments", JSON.stringify(updatedShipments));
 
             if (editingShipment.recipient_email) {
                 await notifyShipmentUpdate({
                     to: editingShipment.recipient_email,
-                    subject: `Transglologistics: Delivery Update ${editingShipment.tracking_number}`,
+                    subject: `Vanguard Freight: Delivery Update ${editingShipment.tracking_number}`,
                     trackingNumber: editingShipment.tracking_number,
                     recipientName: editingShipment.recipient_name || 'Operator',
                     newStatus: newUpdate.status,
@@ -310,7 +310,7 @@ export default function ShipmentsList() {
                                                 </td>
                                                 <td className="px-6 py-5">
                                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border inline-block ${shipment.current_status === 'Delivered' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' :
-                                                        shipment.current_status === 'Held' ? 'bg-red-50 border-red-200 text-red-700' :
+                                                        shipment.current_status === 'Held' ? 'bg-teal-50 border-teal-200 text-teal-700' :
                                                             shipment.current_status === 'Pending' ? 'bg-amber-50 border-amber-200 text-amber-700' :
                                                                 'bg-blue-50 border-blue-200 text-blue-700'
                                                         }`}>
@@ -337,7 +337,7 @@ export default function ShipmentsList() {
                                                         ) : (
                                                             <button
                                                                 onClick={() => handleDelete(shipment.tracking_number)}
-                                                                className="p-2.5 bg-red-50 border border-red-200 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition-all"
+                                                                className="p-2.5 bg-teal-50 border border-teal-200 text-teal-500 rounded-xl hover:bg-teal-600 hover:text-white transition-all"
                                                                 title="Archive"
                                                             >
                                                                 <Trash2 size={16} />

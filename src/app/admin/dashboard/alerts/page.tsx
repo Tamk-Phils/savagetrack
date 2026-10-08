@@ -41,7 +41,7 @@ export default function AlertsManager() {
                                 <div key={alert.id} className="p-10 hover:bg-slate-50 transition-all flex items-center justify-between group">
                                     <div className="flex items-center gap-8">
                                         <div className={`w-14 h-14 rounded-sm flex items-center justify-center border ${
-                                            alert.type === 'Warning' ? 'bg-red-50 border-red-100 text-red-500' : 'bg-primary/5 border-primary/10 text-primary'
+                                            alert.type === 'Warning' ? 'bg-teal-50 border-teal-100 text-teal-500' : 'bg-primary/5 border-primary/10 text-primary'
                                         }`}>
                                             <AlertTriangle size={24} />
                                         </div>
@@ -50,12 +50,12 @@ export default function AlertsManager() {
                                             <div className="flex items-center gap-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                                                 <span className="flex items-center gap-2"><Activity size={12} /> {alert.type}</span>
                                                 <div className="w-1 h-1 rounded-full bg-slate-200" />
-                                                <span className={alert.impact === 'HIGH' ? 'text-red-500' : 'text-primary'}>IMPACT: {alert.impact}</span>
+                                                <span className={alert.impact === 'HIGH' ? 'text-teal-500' : 'text-primary'}>IMPACT: {alert.impact}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                                        <button className="p-3 text-slate-300 hover:text-red-500 transition-colors">
+                                        <button className="p-3 text-slate-300 hover:text-teal-500 transition-colors">
                                             <Trash2 size={20} />
                                         </button>
                                         <button className="bg-slate-900 text-white px-6 py-3 rounded-sm font-black text-[10px] uppercase tracking-widest hover:bg-primary transition-all">

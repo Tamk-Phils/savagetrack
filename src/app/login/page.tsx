@@ -37,7 +37,7 @@ export default function LoginPage() {
         <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 sm:p-10 bg-slate-50 relative overflow-hidden">
             {/* Background elements - Performance Optimized */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-200/30 via-transparent to-transparent opacity-60" />
+                <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-200/30 via-transparent to-transparent opacity-60" />
                 <div className="absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-stone-200/30 via-transparent to-transparent opacity-60" />
             </div>
 
@@ -52,7 +52,7 @@ export default function LoginPage() {
                         <h2 className="text-2xl font-black uppercase tracking-tighter leading-[0.9]">ESTABLISH <br/><span className="text-primary">UPLINK</span></h2>
                     </div>
                     <div className="relative z-10 pt-10 border-t border-white/10">
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">TRANSGLOLOGISTICS</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">VANGUARD FREIGHT</p>
                     </div>
                 </div>
 
@@ -63,7 +63,7 @@ export default function LoginPage() {
                     </div>
 
                     {error && (
-                        <div className="mb-8 p-6 bg-red-50 border border-red-100 text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
+                        <div className="mb-8 p-6 bg-teal-50 border border-teal-100 text-teal-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
                             <ShieldAlert size={16} />
                             ACCESS DENIED: {error}
                         </div>
@@ -79,7 +79,7 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-slate-50 border border-slate-200 rounded-sm py-5 px-6 pl-14 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-bold text-slate-900 text-sm outline-none"
-                                    placeholder="user@transglologistics.com"
+                                    placeholder="user@vanguardfreight.com"
                                 />
                                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                             </div>

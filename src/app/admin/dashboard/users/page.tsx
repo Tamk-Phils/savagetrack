@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function UserManagement() {
     const [users, setUsers] = useState([
-        { id: 1, name: "COMMAND ADMIN", email: "ADMIN@TRANSGLOLOGISTICSSHIPPING.COM", role: "SUPER USER", status: "ACTIVE", lastLogin: "2 MINS AGO" },
+        { id: 1, name: "COMMAND ADMIN", email: "ADMIN@VANGUARD FREIGHTSHIPPING.COM", role: "SUPER USER", status: "ACTIVE", lastLogin: "2 MINS AGO" },
         { id: 2, name: "SARAH JENKINS", email: "S.JENKINS@SWIFT.IO", role: "OPERATOR", status: "ACTIVE", lastLogin: "1 HOUR AGO" },
         { id: 3, name: "ROBERT CHEN", email: "R.CHEN@GLOBALPORT.IO", role: "MANAGER", status: "OFFLINE", lastLogin: "3 DAYS AGO" },
         { id: 4, name: "MICHAEL TORRES", email: "M.TORRES@APEX.IO", role: "OPERATOR", status: "ACTIVE", lastLogin: "5 HOURS AGO" },

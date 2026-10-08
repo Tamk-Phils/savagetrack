@@ -40,7 +40,7 @@ export default function AdminLogin() {
                         <Radar size={14} className="animate-spin-slow" />
                         <span className="text-slate-600">Admin Portal</span>
                     </div>
-                    <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight uppercase">TRANSGLOLOGISTICS <span className="text-primary italic">ADMIN</span></h2>
+                    <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tight uppercase">VANGUARD FREIGHT <span className="text-primary italic">ADMIN</span></h2>
                     <p className="text-slate-500 font-medium text-sm">Please log in to manage shipments</p>
                 </div>
 

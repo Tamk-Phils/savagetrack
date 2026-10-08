@@ -72,23 +72,23 @@ export default function Header() {
             <div className="bg-slate-900 text-slate-300 text-xs py-2 px-6 border-b border-slate-800 hidden md:block">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-6">
-                        <a href="mailto:support@transglologistics.com" className="flex items-center gap-2 hover:text-rose-400 transition-colors">
-                            <Mail size={14} className="text-rose-400" />
-                            <span>support@transglologistics.com</span>
+                        <a href="mailto:support@vanguardfreight.com" className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
+                            <Mail size={14} className="text-emerald-400" />
+                            <span>support@vanguardfreight.com</span>
                         </a>
                         <div className="flex items-center gap-2">
-                            <Phone size={14} className="text-rose-400" />
+                            <Phone size={14} className="text-emerald-400" />
                             <span>+1 254-966-4186</span>
                         </div>
                         <div className="flex items-center gap-2 text-slate-400">
-                            <Clock size={14} className="text-rose-400" />
+                            <Clock size={14} className="text-emerald-400" />
                             <span>24/7 Satellite Global Dispatch</span>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-5">
-                        <Link href="/resources" className="hover:text-rose-400 transition-colors font-medium">Our FAQs</Link>
-                        <Link href="/quote" className="hover:text-rose-400 transition-colors font-semibold text-rose-400">Get a Quote</Link>
+                        <Link href="/resources" className="hover:text-emerald-400 transition-colors font-medium">Our FAQs</Link>
+                        <Link href="/quote" className="hover:text-emerald-400 transition-colors font-semibold text-emerald-400">Get a Quote</Link>
                     </div>
                 </div>
             </div>
@@ -97,14 +97,14 @@ export default function Header() {
             <div className="max-w-7xl mx-auto px-6 h-18 sm:h-20 flex items-center justify-between">
                 {/* Brand Logo */}
                 <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-900/30 group-hover:scale-105 transition-transform duration-200">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/30 group-hover:scale-105 transition-transform duration-200">
                         <Navigation size={20} className="transform rotate-45 sm:w-[22px] sm:h-[22px]" />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-display">
-                            Transglologistics <span className="text-rose-700">Logistics</span>
+                            Vanguard Freight <span className="text-emerald-700">Logistics</span>
                         </span>
-                        <span className="text-[9px] sm:text-[10px] font-extrabold text-rose-700 uppercase tracking-widest -mt-1">
+                        <span className="text-[9px] sm:text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest -mt-1">
                             Locate Your Parcel Anywhere Anytime
                         </span>
                     </div>
@@ -115,7 +115,7 @@ export default function Header() {
                     <Link
                         href="/"
                         className={`text-sm font-bold transition-colors py-1 ${
-                            pathname === "/" ? "text-rose-700" : "text-slate-700 hover:text-rose-700"
+                            pathname === "/" ? "text-emerald-700" : "text-slate-700 hover:text-emerald-700"
                         }`}
                     >
                         Home
@@ -124,7 +124,7 @@ export default function Header() {
                     <Link
                         href="/about"
                         className={`text-sm font-bold transition-colors py-1 ${
-                            pathname === "/about" ? "text-rose-700" : "text-slate-700 hover:text-rose-700"
+                            pathname === "/about" ? "text-emerald-700" : "text-slate-700 hover:text-emerald-700"
                         }`}
                     >
                         About Us
@@ -139,11 +139,11 @@ export default function Header() {
                         <Link
                             href="/usage"
                             className={`flex items-center gap-1 text-sm font-bold transition-colors py-1 ${
-                                pathname === "/usage" ? "text-rose-700" : "text-slate-700 hover:text-rose-700"
+                                pathname === "/usage" ? "text-emerald-700" : "text-slate-700 hover:text-emerald-700"
                             }`}
                         >
                             <span>Our Services</span>
-                            <ChevronDown size={15} className={`transition-transform duration-200 ${isServicesOpen ? 'rotate-180 text-rose-700' : ''}`} />
+                            <ChevronDown size={15} className={`transition-transform duration-200 ${isServicesOpen ? 'rotate-180 text-emerald-700' : ''}`} />
                         </Link>
 
                         {isServicesOpen && (
@@ -153,11 +153,11 @@ export default function Header() {
                                         <Link
                                             key={item.name}
                                             href={item.href}
-                                            className="p-2.5 rounded-xl hover:bg-rose-50 transition-colors group flex items-start gap-3"
+                                            className="p-2.5 rounded-xl hover:bg-emerald-50 transition-colors group flex items-start gap-3"
                                         >
-                                            <div className="w-2 h-2 rounded-full bg-rose-700 mt-2 shrink-0 group-hover:scale-125 transition-transform" />
+                                            <div className="w-2 h-2 rounded-full bg-emerald-700 mt-2 shrink-0 group-hover:scale-125 transition-transform" />
                                             <div>
-                                                <p className="text-xs font-extrabold text-slate-900 group-hover:text-rose-700 transition-colors">{item.name}</p>
+                                                <p className="text-xs font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">{item.name}</p>
                                                 <p className="text-[11px] text-slate-500 font-medium">{item.desc}</p>
                                             </div>
                                         </Link>
@@ -170,7 +170,7 @@ export default function Header() {
                     <Link
                         href="/tracking"
                         className={`text-sm font-bold transition-colors py-1 ${
-                            pathname === "/tracking" ? "text-rose-700" : "text-slate-700 hover:text-rose-700"
+                            pathname === "/tracking" ? "text-emerald-700" : "text-slate-700 hover:text-emerald-700"
                         }`}
                     >
                         Real Time Tracking
@@ -179,7 +179,7 @@ export default function Header() {
                     <Link
                         href="/contact"
                         className={`text-sm font-bold transition-colors py-1 ${
-                            pathname === "/contact" ? "text-rose-700" : "text-slate-700 hover:text-rose-700"
+                            pathname === "/contact" ? "text-emerald-700" : "text-slate-700 hover:text-emerald-700"
                         }`}
                     >
                         Contact Us
@@ -192,9 +192,9 @@ export default function Header() {
                     <div className="relative">
                         <button
                             onClick={() => setIsLangOpen(!isLangOpen)}
-                            className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-rose-700 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 transition-colors cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-emerald-700 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 transition-colors cursor-pointer"
                         >
-                            <Globe size={14} className="text-rose-700" />
+                            <Globe size={14} className="text-emerald-700" />
                             <span>{selectedLang}</span>
                             <ChevronDown size={14} className="text-slate-400" />
                         </button>
@@ -208,7 +208,7 @@ export default function Header() {
                                             setSelectedLang(lang);
                                             setIsLangOpen(false);
                                         }}
-                                        className="w-full text-left px-4 py-1.5 text-xs font-semibold text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition-colors cursor-pointer"
+                                        className="w-full text-left px-4 py-1.5 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors cursor-pointer"
                                     >
                                         {lang} Language
                                     </button>
@@ -220,7 +220,7 @@ export default function Header() {
                     {/* Get a Quote Button */}
                     <Link
                         href="/quote"
-                        className="bg-rose-700 hover:bg-rose-800 active:bg-rose-900 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md shadow-rose-900/20 transition-all flex items-center gap-2 group cursor-pointer"
+                        className="bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md shadow-emerald-900/20 transition-all flex items-center gap-2 group cursor-pointer"
                     >
                         <span>Get a Quote</span>
                         <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -229,7 +229,7 @@ export default function Header() {
                     {/* Client Portal */}
                     <Link
                         href="/login"
-                        className="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-700 transition-colors"
+                        className="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
                         title="Client Portal Login"
                     >
                         <User size={18} />
@@ -272,7 +272,7 @@ export default function Header() {
                                     href="/"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`text-base font-extrabold py-3 px-3 rounded-xl transition-colors ${
-                                        pathname === "/" ? "bg-rose-50 text-rose-700" : "hover:bg-slate-50"
+                                        pathname === "/" ? "bg-emerald-50 text-emerald-700" : "hover:bg-slate-50"
                                     }`}
                                 >
                                     Home
@@ -282,7 +282,7 @@ export default function Header() {
                                     href="/about"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`text-base font-extrabold py-3 px-3 rounded-xl transition-colors ${
-                                        pathname === "/about" ? "bg-rose-50 text-rose-700" : "hover:bg-slate-50"
+                                        pathname === "/about" ? "bg-emerald-50 text-emerald-700" : "hover:bg-slate-50"
                                     }`}
                                 >
                                     About Us
@@ -295,7 +295,7 @@ export default function Header() {
                                         className="w-full flex items-center justify-between text-base font-extrabold py-3 px-3 rounded-xl hover:bg-slate-50 text-slate-900 cursor-pointer"
                                     >
                                         <span>Our Services</span>
-                                        <ChevronDown size={18} className={`transition-transform duration-200 text-rose-700 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
+                                        <ChevronDown size={18} className={`transition-transform duration-200 text-emerald-700 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
                                     </button>
 
                                     <AnimatePresence>
@@ -311,9 +311,9 @@ export default function Header() {
                                                         key={item.name}
                                                         href={item.href}
                                                         onClick={() => setIsMobileMenuOpen(false)}
-                                                        className="flex items-center gap-2 text-xs font-bold text-slate-700 py-2 px-3 rounded-lg hover:bg-rose-50 hover:text-rose-700 transition-colors"
+                                                        className="flex items-center gap-2 text-xs font-bold text-slate-700 py-2 px-3 rounded-lg hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
                                                     >
-                                                        <ChevronRight size={12} className="text-rose-700" />
+                                                        <ChevronRight size={12} className="text-emerald-700" />
                                                         <span>{item.name}</span>
                                                     </Link>
                                                 ))}
@@ -326,7 +326,7 @@ export default function Header() {
                                     href="/tracking"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`text-base font-extrabold py-3 px-3 rounded-xl transition-colors ${
-                                        pathname === "/tracking" ? "bg-rose-50 text-rose-700" : "hover:bg-slate-50"
+                                        pathname === "/tracking" ? "bg-emerald-50 text-emerald-700" : "hover:bg-slate-50"
                                     }`}
                                 >
                                     Real Time Tracking
@@ -336,7 +336,7 @@ export default function Header() {
                                     href="/contact"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`text-base font-extrabold py-3 px-3 rounded-xl transition-colors ${
-                                        pathname === "/contact" ? "bg-rose-50 text-rose-700" : "hover:bg-slate-50"
+                                        pathname === "/contact" ? "bg-emerald-50 text-emerald-700" : "hover:bg-slate-50"
                                     }`}
                                 >
                                     Contact Us
@@ -346,7 +346,7 @@ export default function Header() {
                                     <Link
                                         href="/quote"
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className="w-full text-center bg-rose-700 hover:bg-rose-800 text-white font-extrabold text-sm py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                                        className="w-full text-center bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-sm py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                                     >
                                         <span>Get a Quote</span>
                                         <ArrowRight size={16} />

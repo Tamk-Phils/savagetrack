@@ -62,7 +62,7 @@ export default function ChatWidget() {
                         id: 'welcome',
                         room_id: userRoomId,
                         sender_name: 'System',
-                        content: `Hello ${currentSession.user.user_metadata.full_name || 'there'}! Welcome to Transglologistics Logistics Support. How can we help with your cargo or parcel today?`,
+                        content: `Hello ${currentSession.user.user_metadata.full_name || 'there'}! Welcome to Vanguard Freight & Cargo Support. How can we help with your cargo or parcel today?`,
                         sender_role: 'system',
                         created_at: new Date().toISOString()
                     }]);
@@ -238,7 +238,7 @@ export default function ChatWidget() {
                     id: crypto.randomUUID(),
                     room_id: roomId,
                     sender_name: "System",
-                    content: "Thank you for reaching out! A Transglologistics dispatch agent has been notified and will join the chat momentarily.",
+                    content: "Thank you for reaching out! A Vanguard Freight dispatch agent has been notified and will join the chat momentarily.",
                     sender_role: "system",
                     created_at: new Date().toISOString()
                 };
@@ -272,12 +272,12 @@ export default function ChatWidget() {
                         {/* Header */}
                         <div className="bg-slate-900 p-5 text-white flex justify-between items-center relative overflow-hidden">
                             <div className="flex items-center gap-3 relative z-10">
-                                <div className="w-10 h-10 rounded-2xl bg-rose-700 text-white flex items-center justify-center shadow-lg shadow-rose-900/40">
+                                <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center shadow-lg shadow-emerald-900/40">
                                     <Headset size={20} />
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h4 className="font-extrabold text-sm tracking-tight">Transglologistics Support</h4>
+                                        <h4 className="font-extrabold text-sm tracking-tight">Vanguard Freight Support</h4>
                                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                                     </div>
                                     <p className="text-[11px] text-slate-300 font-medium">Online 24/7 Global Dispatch Desk</p>
@@ -297,13 +297,13 @@ export default function ChatWidget() {
                                 <span className="text-slate-400 shrink-0 font-extrabold uppercase tracking-wider text-[9px]">Quick:</span>
                                 <button
                                     onClick={() => handleQuickAction("Track my consignment")}
-                                    className="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1 rounded-full border border-slate-200/80 hover:border-rose-200 whitespace-nowrap transition-colors shadow-sm"
+                                    className="bg-white hover:bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-slate-200/80 hover:border-emerald-200 whitespace-nowrap transition-colors shadow-sm"
                                 >
                                     📦 Track Consignment
                                 </button>
                                 <button
                                     onClick={() => handleQuickAction("Get a freight quote")}
-                                    className="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1 rounded-full border border-slate-200/80 hover:border-rose-200 whitespace-nowrap transition-colors shadow-sm"
+                                    className="bg-white hover:bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-slate-200/80 hover:border-emerald-200 whitespace-nowrap transition-colors shadow-sm"
                                 >
                                     💰 Request Quote
                                 </button>
@@ -317,7 +317,7 @@ export default function ChatWidget() {
                         >
                             {isLoadingSession ? (
                                 <div className="h-full flex items-center justify-center">
-                                    <Loader2 className="animate-spin text-rose-700" size={24} />
+                                    <Loader2 className="animate-spin text-emerald-700" size={24} />
                                 </div>
                             ) : (
                                 messages.map((msg) => (
@@ -327,7 +327,7 @@ export default function ChatWidget() {
                                     >
                                         <div
                                             className={`max-w-[85%] p-3.5 rounded-2xl text-xs font-semibold leading-relaxed shadow-sm ${msg.sender_role === 'user'
-                                                ? 'bg-rose-700 text-white rounded-br-none'
+                                                ? 'bg-emerald-700 text-white rounded-br-none'
                                                 : msg.sender_role === 'admin'
                                                     ? 'bg-slate-900 text-white rounded-bl-none'
                                                     : 'bg-white text-slate-800 border border-slate-200/80 rounded-bl-none'
@@ -349,7 +349,7 @@ export default function ChatWidget() {
 
                             {isTyping && (
                                 <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold p-2 bg-white rounded-2xl border border-slate-200/60 w-fit">
-                                    <Loader2 className="animate-spin text-rose-700" size={14} />
+                                    <Loader2 className="animate-spin text-emerald-700" size={14} />
                                     <span>Waiting for response...</span>
                                 </div>
                             )}
@@ -367,11 +367,11 @@ export default function ChatWidget() {
                                         placeholder="Type your message..."
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
-                                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-rose-700 transition-colors"
+                                        className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-emerald-700 transition-colors"
                                     />
                                     <button
                                         type="submit"
-                                        className="w-10 h-10 bg-rose-700 hover:bg-rose-800 active:scale-95 text-white rounded-xl flex items-center justify-center transition-all shadow-md shrink-0 cursor-pointer"
+                                        className="w-10 h-10 bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white rounded-xl flex items-center justify-center transition-all shadow-md shrink-0 cursor-pointer"
                                     >
                                         <Send size={16} />
                                     </button>
@@ -381,7 +381,7 @@ export default function ChatWidget() {
                                     <Link 
                                         href="/login"
                                         onClick={() => setIsOpen(false)}
-                                        className="w-full bg-slate-900 hover:bg-rose-700 text-white rounded-xl py-3 flex items-center justify-center gap-2 text-xs font-extrabold tracking-widest uppercase transition-colors shadow-lg"
+                                        className="w-full bg-slate-900 hover:bg-emerald-700 text-white rounded-xl py-3 flex items-center justify-center gap-2 text-xs font-extrabold tracking-widest uppercase transition-colors shadow-lg"
                                     >
                                         <Lock size={14} />
                                         Secure Sign In
@@ -396,7 +396,7 @@ export default function ChatWidget() {
             {/* Floating Trigger Button */}
             <div className="relative">
                 {unreadCount > 0 && !isOpen && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-700 text-white font-extrabold text-[10px] rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10 animate-bounce">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-700 text-white font-extrabold text-[10px] rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10 animate-bounce">
                         {unreadCount}
                     </span>
                 )}
@@ -404,7 +404,7 @@ export default function ChatWidget() {
                     whileHover={{ scale: 1.06 }}
                     whileTap={{ scale: 0.94 }}
                     onClick={isOpen ? () => setIsOpen(false) : handleOpen}
-                    className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all cursor-pointer ${isOpen ? 'bg-slate-900 text-white' : 'bg-rose-700 text-white hover:bg-rose-800 shadow-rose-900/40'
+                    className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all cursor-pointer ${isOpen ? 'bg-slate-900 text-white' : 'bg-emerald-700 text-white hover:bg-emerald-800 shadow-emerald-900/40'
                         }`}
                 >
                     {isOpen ? <X size={24} /> : <MessageCircle size={26} />}

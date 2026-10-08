@@ -31,7 +31,7 @@ const SidebarContent = ({
                     <Radar size={20} className="animate-pulse" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-sm font-black tracking-tighter text-slate-900 uppercase">Transglologistics Admin</span>
+                    <span className="text-sm font-black tracking-tighter text-slate-900 uppercase">Vanguard Freight Admin</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Management Portal</span>
                 </div>
             </div>
@@ -79,7 +79,7 @@ const SidebarContent = ({
                     setIsSidebarOpen(false);
                     router.push("/admin");
                 }}
-                className="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all text-xs font-bold uppercase tracking-wider border border-transparent"
+                className="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-teal-500 hover:bg-teal-50 transition-all text-xs font-bold uppercase tracking-wider border border-transparent"
             >
                 <LogOut size={18} />
                 Log Out

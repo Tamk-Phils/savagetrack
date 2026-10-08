@@ -29,7 +29,7 @@ export default function ResourcesPage() {
              {/* Simple Header */}
             <div className="relative pt-48 pb-32 bg-slate-900 overflow-hidden">
                 <div className="absolute inset-0 opacity-20 pointer-events-none">
-                    <Image src="https://images.unsplash.com/photo-1508873696983-2df57046475a?q=80&w=2000" alt="World Map" fill className="object-cover" />
+                    <Image src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000" alt="World Map" fill className="object-cover" />
                 </div>
                 <div className="container mx-auto px-6 max-w-7xl relative z-10 text-center text-white">
                     <motion.div
@@ -103,7 +103,7 @@ export default function ResourcesPage() {
 
                     <div className="bg-primary p-16 rounded-3xl relative overflow-hidden shadow-2xl group">
                         <div className="absolute top-0 right-0 w-64 h-64 opacity-[0.1] grayscale pointer-events-none group-hover:scale-110 transition-transform duration-700">
-                            <Image src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2000" alt="Logistics Software and Digital Assets" fill className="object-cover" />
+                            <Image src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2000" alt="Logistics Software and Digital Assets" fill className="object-cover" />
                         </div>
                         <div className="relative z-10">
                             <h3 className="text-3xl font-black mb-6 text-white tracking-tight">Downloads Center</h3>
@@ -124,16 +124,16 @@ export default function ResourcesPage() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 h-64">
                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                      <Image src="https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1000" alt="Team" fill className="object-cover" />
+                      <Image src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000" alt="Team" fill className="object-cover" />
                    </div>
                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                      <Image src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=1000" alt="Truck" fill className="object-cover" />
+                      <Image src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1000" alt="Truck" fill className="object-cover" />
                    </div>
                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                      <Image src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=1000" alt="Plane" fill className="object-cover" />
+                      <Image src="https://images.unsplash.com/photo-1520690214124-2405c5217036?q=80&w=1000" alt="Plane" fill className="object-cover" />
                    </div>
                    <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                      <Image src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=1000" alt="Ship" fill className="object-cover" />
+                      <Image src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=1000" alt="Ship" fill className="object-cover" />
                    </div>
                 </div>
             </div>

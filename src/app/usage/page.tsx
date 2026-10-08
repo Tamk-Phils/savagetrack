@@ -10,7 +10,7 @@ export default function UsagePage() {
             id: "air",
             title: "Air Freight",
             desc: "Rapid international air cargo corridors providing guaranteed transit times, chartering, and express custom handling.",
-            img: "https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1520690214124-2405c5217036?q=80&w=1000",
             icon: Plane,
             features: ["Priority Air Cargo Booking", "Temperature-Controlled Holds", "Direct Airport Customs Scan"]
         },
@@ -18,7 +18,7 @@ export default function UsagePage() {
             id: "road",
             title: "Road Transport",
             desc: "Nationwide ground express freight connecting regional hubs with continuous satellite GPS waybill tracking.",
-            img: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1000",
             icon: Truck,
             features: ["Full Truckload (FTL) & LTL", "Interstate Expedited Express", "Door-to-Door Last-Mile Delivery"]
         },
@@ -26,7 +26,7 @@ export default function UsagePage() {
             id: "ocean",
             title: "Ocean Freight",
             desc: "International maritime container shipping with full container load (FCL) and less than container load (LCL) options.",
-            img: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=1000",
             icon: Ship,
             features: ["FCL & LCL Maritime Lines", "Port Customs Clearing Desk", "Global Vessel Schedule Monitoring"]
         },
@@ -34,7 +34,7 @@ export default function UsagePage() {
             id: "rail",
             title: "Rail Freight",
             desc: "Eco-friendly, high-capacity long-distance rail logistics tailored for heavy industrial freight and bulk raw materials.",
-            img: "https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=1000",
             icon: Train,
             features: ["Bulk Rail Intermodal Transit", "Low-Emission Freight Corridors", "Regional Terminal Transfer"]
         },
@@ -50,7 +50,7 @@ export default function UsagePage() {
             id: "packaging",
             title: "Packaging & Crating",
             desc: "Industrial protective packaging, custom wooden crating, and hazardous material containerization for safe transit.",
-            img: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1565891741441-64926e441838?q=80&w=1000",
             icon: Package,
             features: ["Custom Wooden Crating", "Shock & Moisture Protection", "Eco-Friendly Recyclable Materials"]
         },
@@ -58,7 +58,7 @@ export default function UsagePage() {
             id: "logistics",
             title: "Logistics Solutions",
             desc: "End-to-end supply chain integration, route optimization, and vendor logistics management designed for enterprise operations.",
-            img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000",
+            img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000",
             icon: Layers,
             features: ["Supply Chain Route Audits", "Vendor Management Systems", "Customs Compliance Strategy"]
         },
@@ -77,7 +77,7 @@ export default function UsagePage() {
             {/* Header Banner */}
             <div className="bg-slate-900 text-white py-16 mb-16 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-4">
-                    <span className="text-xs font-black uppercase tracking-widest text-rose-400">MULTIFACETED SERVICE PORTFOLIO</span>
+                    <span className="text-xs font-black uppercase tracking-widest text-emerald-400">MULTIFACETED SERVICE PORTFOLIO</span>
                     <h1 className="text-4xl md:text-6xl font-black tracking-tight">Our Services</h1>
                     <p className="text-slate-300 text-base md:text-lg max-w-3xl mx-auto font-medium">
                         Comprehensive shipping & logistics solutions tailored to simplify your supply chain needs across air, land, ocean, rail, and warehousing.
@@ -100,20 +100,20 @@ export default function UsagePage() {
                                         alt={service.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
-                                    <div className="absolute top-4 left-4 w-12 h-12 bg-white/95 rounded-2xl flex items-center justify-center text-rose-700 shadow-md backdrop-blur-md">
+                                    <div className="absolute top-4 left-4 w-12 h-12 bg-white/95 rounded-2xl flex items-center justify-center text-emerald-700 shadow-md backdrop-blur-md">
                                         <service.icon size={24} />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-slate-900 group-hover:text-rose-700 transition-colors">{service.title}</h3>
+                                    <h3 className="text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors">{service.title}</h3>
                                     <p className="text-slate-600 text-xs md:text-sm font-medium leading-relaxed">{service.desc}</p>
                                 </div>
 
                                 <ul className="space-y-2 pt-2 border-t border-slate-100">
                                     {service.features.map((feat, idx) => (
                                         <li key={idx} className="flex items-center gap-2.5 text-xs font-bold text-slate-700">
-                                            <Check size={14} className="text-rose-700 shrink-0" />
+                                            <Check size={14} className="text-emerald-700 shrink-0" />
                                             <span>{feat}</span>
                                         </li>
                                     ))}
@@ -121,10 +121,10 @@ export default function UsagePage() {
                             </div>
 
                             <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                                <Link href="/quote" className="inline-flex items-center gap-2 text-white bg-rose-700 hover:bg-rose-800 font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all">
+                                <Link href="/quote" className="inline-flex items-center gap-2 text-white bg-emerald-700 hover:bg-emerald-800 font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all">
                                     Get Quote for {service.title} <ArrowRight size={14} />
                                 </Link>
-                                <Link href="/tracking" className="text-xs font-extrabold text-rose-700 hover:underline">
+                                <Link href="/tracking" className="text-xs font-extrabold text-emerald-700 hover:underline">
                                     Track Freight
                                 </Link>
                             </div>

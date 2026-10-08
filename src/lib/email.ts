@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 function getTransporter() {
     const host = process.env.SMTP_HOST || 'mail.spacemail.com';
     const port = parseInt(process.env.SMTP_PORT || '465');
-    const user = process.env.SMTP_USER || 'support@transglologistics.com';
+    const user = process.env.SMTP_USER || 'support@vanguardfreight.com';
     const pass = process.env.SMTP_PASS || 'Marc1234?';
 
     return nodemailer.createTransport({
@@ -44,13 +44,13 @@ interface UpdateShipmentParams extends BaseEmailParams {
     description: string;
 }
 
-const getTrackingLink = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://transglologistics.com"}/tracking`;
+const getTrackingLink = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://vanguardfreight.com"}/tracking`;
 
 function getMailIdentity() {
-    const address = (process.env.FROM_EMAIL || process.env.SMTP_USER || "support@transglologistics.com").trim();
+    const address = (process.env.FROM_EMAIL || process.env.SMTP_USER || "support@vanguardfreight.com").trim();
     return {
         address,
-        name: process.env.FROM_NAME || "Transglologistics"
+        name: process.env.FROM_NAME || "Vanguard Freight"
     };
 }
 
@@ -77,7 +77,7 @@ export async function sendShipmentCreatedEmail({
     const htmlContent = `
         <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;">
             <div style="background-color: #050508; padding: 30px; text-align: center; border-radius: 4px 4px 0 0;">
-                <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">TRANSGLOLOGISTICS</h1>
+                <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">VANGUARD FREIGHT</h1>
                 <p style="color: #ffffff; margin: 5px 0 0; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5;">Operational Data</p>
             </div>
             <div style="padding: 40px; background-color: #ffffff;">
@@ -86,7 +86,7 @@ export async function sendShipmentCreatedEmail({
                     IDENTIFIER: <strong>${recipientName}</strong>,
                 </p>
                 <p style="color: #64748b; font-size: 14px; line-height: 1.6; font-weight: 500;">
-                    A new transit service has been established by <strong>${senderName}</strong>. Your asset is now being tracked across the Transglologistics network.
+                    A new transit service has been established by <strong>${senderName}</strong>. Your asset is now being tracked across the Vanguard Freight network.
                 </p>
                 
                 <div style="background-color: #f8fafc; padding: 25px; border-radius: 4px; margin: 30px 0; border: 1px solid #e2e8f0;">
@@ -120,7 +120,7 @@ export async function sendShipmentCreatedEmail({
     `;
 
     const textContent = `
-TRANSGLOLOGISTICS - SHIPMENT REGISTRATION NOTICE
+VANGUARD FREIGHT - SHIPMENT REGISTRATION NOTICE
 
 Hello ${recipientName},
 
@@ -131,8 +131,8 @@ Destination: ${destination}
 
 Track your package online at: ${trackingLink}
 
-Thank you for choosing Transglologistics Logistics.
-Support Email: support@transglologistics.com
+Thank you for choosing Vanguard Freight & Cargo.
+Support Email: support@vanguardfreight.com
 `;
 
     if (!recipient) {
@@ -149,7 +149,7 @@ Support Email: support@transglologistics.com
             text: textContent,
             html: htmlContent,
             headers: {
-                'X-Mailer': 'Transglologistics-Shipping/1.0'
+                'X-Mailer': 'Vanguard Freight-Shipping/1.0'
             }
         });
         console.log(`Email successfully dispatched to: ${recipient}`);
@@ -182,7 +182,7 @@ export async function sendShipmentUpdateEmail({
     const htmlContent = `
         <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 4px; background-color: #ffffff;">
             <div style="background-color: #050508; padding: 30px; text-align: center; border-radius: 4px 4px 0 0;">
-                <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">TRANSGLOLOGISTICS</h1>
+                <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">VANGUARD FREIGHT</h1>
                 <p style="color: #ffffff; margin: 5px 0 0; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5;">Operational Data</p>
             </div>
             <div style="padding: 40px; background-color: #ffffff;">
@@ -218,7 +218,7 @@ export async function sendShipmentUpdateEmail({
     `;
 
     const textContent = `
-TRANSGLOLOGISTICS - SHIPMENT UPDATE NOTICE
+VANGUARD FREIGHT - SHIPMENT UPDATE NOTICE
 
 Hello ${recipientName},
 
@@ -229,7 +229,7 @@ Details: ${description || 'No additional variance reported.'}
 
 Track package online at: ${trackingLink}
 
-Support Email: support@transglologistics.com
+Support Email: support@vanguardfreight.com
 `;
 
     if (!recipient) {
@@ -245,7 +245,7 @@ Support Email: support@transglologistics.com
             text: textContent,
             html: htmlContent,
             headers: {
-                'X-Mailer': 'Transglologistics-Shipping/1.0'
+                'X-Mailer': 'Vanguard Freight-Shipping/1.0'
             }
         });
         console.log(`Update email successfully dispatched to: ${recipient}`);

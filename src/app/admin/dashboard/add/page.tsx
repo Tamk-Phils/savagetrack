@@ -34,7 +34,7 @@ export default function AddShipment() {
         weight: "15",
         dimensions: "12x12x12",
         service_level: "Priority Air Express",
-        carrier: "Transglologistics Air Express Fleet",
+        carrier: "Vanguard Freight Air Express Fleet",
         declared_value: "150.00",
         quantity: "1",
         current_status: "Pending",
@@ -103,18 +103,18 @@ export default function AddShipment() {
             }
 
             // Always ensure local cache storage copy exists
-            const existingRaw = localStorage.getItem("transglologistics_shipments") || localStorage.getItem("transglologistics_shipments");
+            const existingRaw = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
             const existing: any[] = existingRaw ? JSON.parse(existingRaw) : [];
             existing.push({ ...newShipment, id: Math.random().toString(36).substr(2, 9) });
-            localStorage.setItem("transglologistics_shipments", JSON.stringify(existing));
+            localStorage.setItem("vanguardfreight_shipments", JSON.stringify(existing));
 
             if (formData.recipient_email) {
                 try {
                     await notifyShipmentCreated({
                         to: formData.recipient_email,
-                        subject: `Transglologistics: Package ${formData.tracking_number} Registered`,
+                        subject: `Vanguard Freight: Package ${formData.tracking_number} Registered`,
                         trackingNumber: formData.tracking_number,
-                        senderName: formData.sender_name || 'Transglologistics Admin',
+                        senderName: formData.sender_name || 'Vanguard Freight Admin',
                         recipientName: formData.recipient_name || 'Recipient',
                         origin: formData.origin || 'Source Hub',
                         destination: formData.destination || 'Destination Hub'
@@ -128,10 +128,10 @@ export default function AddShipment() {
         } catch (err: any) {
             console.error("Shipment Registration Error:", err);
             // Fallback save to ensure administrative workflow is uninterrupted
-            const existingRaw = localStorage.getItem("transglologistics_shipments") || localStorage.getItem("transglologistics_shipments");
+            const existingRaw = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
             const existing: any[] = existingRaw ? JSON.parse(existingRaw) : [];
             existing.push({ ...newShipment, id: Math.random().toString(36).substr(2, 9) });
-            localStorage.setItem("transglologistics_shipments", JSON.stringify(existing));
+            localStorage.setItem("vanguardfreight_shipments", JSON.stringify(existing));
             router.push("/admin/dashboard/shipments");
         } finally {
             setIsSaving(false);
@@ -153,7 +153,7 @@ export default function AddShipment() {
             </div>
 
             {error && (
-                <div className="bg-red-50 border border-red-200 p-6 rounded-2xl flex items-center gap-4 text-red-600 animate-in fade-in slide-in-from-top-4">
+                <div className="bg-teal-50 border border-teal-200 p-6 rounded-2xl flex items-center gap-4 text-teal-600 animate-in fade-in slide-in-from-top-4">
                     <AlertCircle size={24} />
                     <p className="font-bold text-sm">Error: {error}</p>
                 </div>
@@ -226,7 +226,7 @@ export default function AddShipment() {
                                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Carrier Transport</label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. Transglologistics Fleet Air"
+                                    placeholder="e.g. Vanguard Freight Fleet Air"
                                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 focus:border-primary font-bold text-xs text-slate-900 outline-none"
                                     value={formData.carrier}
                                     onChange={(e) => setFormData({ ...formData, carrier: e.target.value })}
@@ -318,7 +318,7 @@ export default function AddShipment() {
                                         <input
                                             type="email"
                                             required
-                                            placeholder="admin@transglologistics.com"
+                                            placeholder="admin@vanguardfreight.com"
                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:border-primary font-bold text-xs text-slate-900 outline-none"
                                             value={formData.sender_email}
                                             onChange={(e) => setFormData({ ...formData, sender_email: e.target.value })}
@@ -533,7 +533,7 @@ export default function AddShipment() {
                     </div>
 
                     <div className="pt-10 border-t border-slate-100 flex items-center justify-end gap-6 relative z-10">
-                        <Link href="/admin/dashboard/shipments" className="text-xs font-bold text-slate-500 hover:text-red-500 transition-colors uppercase tracking-wider">Cancel</Link>
+                        <Link href="/admin/dashboard/shipments" className="text-xs font-bold text-slate-500 hover:text-teal-500 transition-colors uppercase tracking-wider">Cancel</Link>
                         <button
                             type="submit"
                             disabled={isSaving}

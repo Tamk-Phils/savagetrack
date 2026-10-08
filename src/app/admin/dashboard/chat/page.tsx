@@ -262,7 +262,7 @@ export default function AdminChat() {
                                             onClick={(e) => handleDeleteRoom(e, room.id)}
                                             className={`p-2 rounded-sm transition-all ${selectedRoomId === room.id
                                                 ? 'text-white/30 hover:text-white hover:bg-white/10'
-                                                : 'text-slate-200 hover:text-red-500 hover:bg-red-50'
+                                                : 'text-slate-200 hover:text-teal-500 hover:bg-teal-50'
                                                 }`}
                                             title="Terminate Connection"
                                         >

@@ -8,7 +8,7 @@ export default function ReportsPage() {
         { label: "PLANETARY REVENUE", val: "$428,500", change: "+12.5%", trend: "up", color: "text-primary" },
         { label: "ACTIVE DELIVERYS", val: "1,842", change: "+4.2%", trend: "up", color: "text-primary" },
         { label: "OFFICE SYNC TIME", val: "4.2 DAYS", change: "-0.5 DAYS", trend: "down", color: "text-primary" },
-        { label: "FUEL SURCHARGE", val: "18.5%", change: "+2.1%", trend: "up", color: "text-red-500" },
+        { label: "FUEL SURCHARGE", val: "18.5%", change: "+2.1%", trend: "up", color: "text-teal-500" },
     ];
 
     return (

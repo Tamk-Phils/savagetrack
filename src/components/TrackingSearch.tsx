@@ -36,7 +36,7 @@ export default function TrackingSearch() {
             origin: "Frankfurt Hub, Germany",
             destination: "JFK Airport, New York, USA",
             sender_name: "Global Logistics Freight Corp",
-            sender_email: "dispatch@transglologistics.com",
+            sender_email: "dispatch@vanguardfreight.com",
             recipient_name: "Robert Vance & Partners",
             recipient_email: "r.vance@vanceglobal.com",
             recipient_address: "350 Fifth Avenue, Suite 4200, New York, NY 10118",
@@ -60,7 +60,7 @@ export default function TrackingSearch() {
                     shipment_id: uppercaseCode,
                     status: "In Delivery",
                     location: "JFK International Freight Terminal",
-                    description: "Package arrived at regional sorting hub. Assigned to Transglologistics Express Air Network.",
+                    description: "Package arrived at regional sorting hub. Assigned to Vanguard Freight Express Air Network.",
                     created_at: new Date(Date.now() - 3600000 * 3).toISOString()
                 },
                 {
@@ -76,7 +76,7 @@ export default function TrackingSearch() {
                     shipment_id: uppercaseCode,
                     status: "Dispatch Processed",
                     location: "Frankfurt Gateway",
-                    description: "Package logged into Transglologistics satellite tracking system.",
+                    description: "Package logged into Vanguard Freight satellite tracking system.",
                     created_at: new Date(Date.now() - 3600000 * 48).toISOString()
                 }
             ]
@@ -118,7 +118,7 @@ export default function TrackingSearch() {
         // 2. Try LocalStorage
         if (!found && typeof window !== "undefined") {
             try {
-                const saved = localStorage.getItem("transglologistics_shipments") || localStorage.getItem("transglologistics_shipments");
+                const saved = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
                 if (saved) {
                     const localShipments: Shipment[] = JSON.parse(saved);
                     const match = localShipments.find(s =>
@@ -138,11 +138,11 @@ export default function TrackingSearch() {
             found = generateSimulatedShipment(cleanQuery);
             if (typeof window !== "undefined") {
                 try {
-                    const saved = localStorage.getItem("transglologistics_shipments");
+                    const saved = localStorage.getItem("vanguardfreight_shipments");
                     const localShipments: Shipment[] = saved ? JSON.parse(saved) : [];
                     if (!localShipments.some(s => s.tracking_number.toLowerCase() === cleanQuery.toLowerCase())) {
                         localShipments.push(found);
-                        localStorage.setItem("transglologistics_shipments", JSON.stringify(localShipments));
+                        localStorage.setItem("vanguardfreight_shipments", JSON.stringify(localShipments));
                     }
                 } catch (e) {
                     // quota ignore
@@ -169,8 +169,8 @@ export default function TrackingSearch() {
             {/* Search Input Box - Matching Uploaded Reference Image */}
             <form onSubmit={handleSearchSubmit} className="relative">
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-                    <div className="relative flex-grow w-full flex items-center px-4 bg-slate-50 border-2 border-slate-300 rounded-lg focus-within:border-rose-700 focus-within:bg-white transition-all">
-                        <Package size={24} className="text-rose-700 shrink-0 mr-3" />
+                    <div className="relative flex-grow w-full flex items-center px-4 bg-slate-50 border-2 border-slate-300 rounded-lg focus-within:border-emerald-700 focus-within:bg-white transition-all">
+                        <Package size={24} className="text-emerald-700 shrink-0 mr-3" />
                         <input
                             type="text"
                             value={trackingNumber}
@@ -186,7 +186,7 @@ export default function TrackingSearch() {
                     <button
                         type="submit"
                         disabled={isSearching}
-                        className="w-full sm:w-auto bg-rose-700 hover:bg-rose-800 active:bg-rose-900 text-white font-bold text-base px-8 py-4 rounded-xl md:rounded-full transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-rose-900/25"
+                        className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-bold text-base px-8 py-4 rounded-xl md:rounded-full transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-emerald-900/25"
                     >
                         {isSearching ? (
                             <>
@@ -208,10 +208,10 @@ export default function TrackingSearch() {
                 <div className="flex items-center gap-4">
                     <span className="text-slate-300 font-medium">Popular carriers:</span>
                     <div className="flex items-center gap-5 font-black text-slate-400 tracking-wider">
-                        <span className="hover:text-rose-700 transition-colors">DHL</span>
-                        <span className="hover:text-rose-700 transition-colors">FedEx</span>
-                        <span className="hover:text-rose-700 transition-colors">UPS</span>
-                        <span className="hover:text-rose-700 transition-colors">Aramex</span>
+                        <span className="hover:text-emerald-700 transition-colors">DHL</span>
+                        <span className="hover:text-emerald-700 transition-colors">FedEx</span>
+                        <span className="hover:text-emerald-700 transition-colors">UPS</span>
+                        <span className="hover:text-emerald-700 transition-colors">Aramex</span>
                     </div>
                 </div>
             </div>
@@ -223,11 +223,11 @@ export default function TrackingSearch() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="mt-6 p-5 rounded-2xl bg-rose-50 border border-rose-100 flex items-start gap-4"
+                        className="mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-start gap-4"
                     >
-                        <AlertCircle className="text-rose-500 shrink-0 mt-0.5" size={20} />
+                        <AlertCircle className="text-emerald-500 shrink-0 mt-0.5" size={20} />
                         <div>
-                            <p className="font-bold text-xs text-rose-600 uppercase tracking-wider">TRACKING ALERT</p>
+                            <p className="font-bold text-xs text-emerald-600 uppercase tracking-wider">TRACKING ALERT</p>
                             <p className="text-slate-600 mt-0.5 text-sm">{error}</p>
                         </div>
                     </motion.div>
@@ -244,8 +244,8 @@ export default function TrackingSearch() {
                         <div className="bg-slate-900 p-8 md:p-10 flex flex-wrap justify-between items-center gap-6 text-white">
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_rgba(225,29,72,0.9)]" />
-                                    <p className="text-rose-400 text-xs font-mono font-bold uppercase tracking-widest">TRANSGLOLOGISTICS LOGISTICS LIVE</p>
+                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(225,29,72,0.9)]" />
+                                    <p className="text-emerald-400 text-xs font-mono font-bold uppercase tracking-widest">VANGUARD FREIGHT & CARGO LIVE</p>
                                 </div>
                                 <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
                                     {result.current_status || "IN TRANSIT"}
@@ -269,7 +269,7 @@ export default function TrackingSearch() {
 
                         <div className="p-8 md:p-12 space-y-10">
                             {/* Route Indicator */}
-                            <div className="p-6 md:p-8 rounded-2xl bg-rose-50/60 border border-rose-100">
+                            <div className="p-6 md:p-8 rounded-2xl bg-emerald-50/60 border border-emerald-100">
                                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                     <div className="text-center md:text-left space-y-1">
                                         <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">ORIGIN</p>
@@ -277,17 +277,17 @@ export default function TrackingSearch() {
                                     </div>
 
                                     <div className="flex-1 w-full max-w-md space-y-2">
-                                        <div className="h-1.5 bg-rose-200/60 w-full rounded-full relative overflow-hidden">
+                                        <div className="h-1.5 bg-emerald-200/60 w-full rounded-full relative overflow-hidden">
                                             <motion.div 
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "75%" }}
                                                 transition={{ duration: 1.5, ease: "easeOut" }}
-                                                className="h-full bg-rose-700 rounded-full"
+                                                className="h-full bg-emerald-700 rounded-full"
                                             />
                                         </div>
-                                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-rose-700">
+                                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700">
                                             <Truck size={14} className="animate-pulse" />
-                                            En Route via Transglologistics Transit Network
+                                            En Route via Vanguard Freight Transit Network
                                         </div>
                                     </div>
 
@@ -302,7 +302,7 @@ export default function TrackingSearch() {
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm">
                                     <div className="flex items-center gap-3.5">
-                                        <div className="w-10 h-10 rounded-xl bg-rose-700 text-white flex items-center justify-center shadow-md">
+                                        <div className="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-md">
                                             <Globe size={20} />
                                         </div>
                                         <div>
@@ -316,8 +316,8 @@ export default function TrackingSearch() {
                                         onClick={() => setShowMap(!showMap)}
                                         className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer shadow-sm ${
                                             showMap 
-                                                ? 'bg-rose-700 text-white border-rose-700 hover:bg-rose-800' 
-                                                : 'bg-white text-slate-700 border-slate-200 hover:border-rose-700 hover:text-rose-700'
+                                                ? 'bg-emerald-700 text-white border-emerald-700 hover:bg-emerald-800' 
+                                                : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
                                         }`}
                                     >
                                         <MapPin size={15} />
@@ -337,8 +337,8 @@ export default function TrackingSearch() {
                                         >
                                             <div className="h-[400px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
                                                 <div className="absolute top-4 left-4 z-[400] bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-white flex items-center gap-3">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                                                    <span className="text-xs font-bold uppercase tracking-wider">TRANSGLOLOGISTICS LIVE SATELLITE GPS</span>
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                    <span className="text-xs font-bold uppercase tracking-wider">VANGUARD FREIGHT LIVE SATELLITE GPS</span>
                                                 </div>
                                                 <LiveMap
                                                     lat={result.latitude}
@@ -362,19 +362,19 @@ export default function TrackingSearch() {
                                 <div className="lg:col-span-2 space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-                                            <div className="flex items-center gap-2 text-rose-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
+                                            <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
                                                 <User size={16} /> Sender Information
                                             </div>
                                             <p className="text-xs text-slate-400 font-medium">NAME</p>
                                             <p className="text-slate-900 font-bold text-base">{result.sender_name || 'N/A'}</p>
                                             <p className="text-slate-500 text-xs flex items-center gap-2 pt-1">
-                                                <Mail size={13} className="text-rose-600" />
+                                                <Mail size={13} className="text-emerald-600" />
                                                 {result.sender_email || 'N/A'}
                                             </p>
                                         </div>
 
                                         <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-                                            <div className="flex items-center gap-2 text-rose-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
+                                            <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
                                                 <MapPin size={16} /> Recipient Information
                                             </div>
                                             <p className="text-xs text-slate-400 font-medium">RECIPIENT NAME</p>
@@ -387,7 +387,7 @@ export default function TrackingSearch() {
 
                                     <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
                                         <div className="flex items-center gap-2 text-slate-700 text-xs font-bold uppercase tracking-wider">
-                                            <FileText size={15} className="text-rose-700" /> Package Description & Content
+                                            <FileText size={15} className="text-emerald-700" /> Package Description & Content
                                         </div>
                                         <p className="text-slate-600 text-sm leading-relaxed">
                                             {result.description || 'Standard high-value express shipment parcel.'}
@@ -397,7 +397,7 @@ export default function TrackingSearch() {
 
                                 <div className="space-y-6">
                                     <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-4">
-                                        <div className="flex items-center gap-2 text-rose-700 text-xs font-bold uppercase tracking-wider pb-3 border-b border-slate-200">
+                                        <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider pb-3 border-b border-slate-200">
                                             <Package size={16} /> Cargo Specifications
                                         </div>
                                         <div className="space-y-3 text-xs">
@@ -407,7 +407,7 @@ export default function TrackingSearch() {
                                             </div>
                                             <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
                                                 <span className="text-slate-500 font-medium">SERVICE TYPE</span>
-                                                <span className="text-rose-700 font-bold">{result.item_type || 'EXPRESS'}</span>
+                                                <span className="text-emerald-700 font-bold">{result.item_type || 'EXPRESS'}</span>
                                             </div>
                                             <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
                                                 <span className="text-slate-500 font-medium">ESTIMATED DELIVERY</span>
@@ -426,7 +426,7 @@ export default function TrackingSearch() {
 
                                     <button 
                                         onClick={() => window.print()} 
-                                        className="w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all"
+                                        className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all"
                                     >
                                         <Download size={15} /> Download Waybill PDF
                                     </button>
@@ -436,24 +436,24 @@ export default function TrackingSearch() {
                             {/* Tracking History Audit Trail */}
                             <div className="space-y-6 pt-6 border-t border-slate-100">
                                 <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                                    <Clock size={16} className="text-rose-700" />
+                                    <Clock size={16} className="text-emerald-700" />
                                     Tracking Status History
                                 </h3>
 
-                                <div className="space-y-6 pl-4 border-l-2 border-rose-100 ml-2">
+                                <div className="space-y-6 pl-4 border-l-2 border-emerald-100 ml-2">
                                     {result.updates && result.updates.length > 0 ? (
                                         result.updates.map((update: ShipmentUpdate, idx: number) => (
                                             <div key={idx} className="relative pl-6 space-y-1">
-                                                <div className={`absolute -left-[21px] top-1 w-3.5 h-3.5 rounded-full border-2 ${idx === 0 ? 'bg-rose-700 border-rose-700 shadow-[0_0_8px_rgba(190,18,60,0.8)]' : 'bg-white border-slate-300'}`} />
+                                                <div className={`absolute -left-[21px] top-1 w-3.5 h-3.5 rounded-full border-2 ${idx === 0 ? 'bg-emerald-700 border-emerald-700 shadow-[0_0_8px_rgba(190,18,60,0.8)]' : 'bg-white border-slate-300'}`} />
                                                 <div className="flex flex-wrap items-center gap-3">
-                                                    <p className={`font-bold text-sm ${idx === 0 ? 'text-rose-700' : 'text-slate-800'}`}>{update.status}</p>
+                                                    <p className={`font-bold text-sm ${idx === 0 ? 'text-emerald-700' : 'text-slate-800'}`}>{update.status}</p>
                                                     <span className="text-[11px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
                                                         {new Date(update.created_at).toLocaleString()}
                                                     </span>
                                                 </div>
                                                 <p className="text-slate-600 text-xs leading-relaxed">{update.description}</p>
                                                 <p className="text-[11px] text-slate-500 flex items-center gap-1 font-medium">
-                                                    <MapPin size={12} className="text-rose-600" /> Location: {update.location}
+                                                    <MapPin size={12} className="text-emerald-600" /> Location: {update.location}
                                                 </p>
                                             </div>
                                         ))

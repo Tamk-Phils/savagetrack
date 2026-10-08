@@ -29,7 +29,7 @@ export default function CompanyPage() {
                             <span className="text-primary italic">REDEFINED.</span>
                         </motion.h1>
                         <p className="text-2xl text-slate-400 font-black leading-tight mb-16 uppercase tracking-tight max-w-2xl">
-                            FOUNDED IN 2021, TRANSGLOLOGISTICS WAS BORN FROM A RADICAL OBSERVATION: THE PLANET'S MOST COMPLEX INDUSTRY WAS OPERATING ON FRAGMENTED, LEGACY DATA. WE BUILT THE CURE.
+                            FOUNDED IN 2021, VANGUARD FREIGHT WAS BORN FROM A RADICAL OBSERVATION: THE PLANET'S MOST COMPLEX INDUSTRY WAS OPERATING ON FRAGMENTED, LEGACY DATA. WE BUILT THE CURE.
                         </p>
                     </div>
                 </div>
@@ -87,7 +87,7 @@ export default function CompanyPage() {
                             </div>
                         </div>
                         <div className="relative aspect-square rounded-sm overflow-hidden shadow-3xl grayscale hover:grayscale-0 transition-all duration-1000 group">
-                            <Image src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000" alt="Transglologistics" fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
+                            <Image src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000" alt="Vanguard Freight" fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
                             <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-1000" />
                             <div className="absolute bottom-10 left-10 p-6 bg-slate-900/90 backdrop-blur-md text-white rounded-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <p className="text-[10px] font-black uppercase tracking-[0.4em]">OFFICE SWL-942 / NAIROBI</p>
@@ -108,7 +108,7 @@ export default function CompanyPage() {
                             <Zap className="text-primary" size={24} />
                             <span className="text-[10px] font-black text-primary uppercase tracking-[0.6em]">DNA SEQUENCE</span>
                         </div>
-                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-10 uppercase italic">THE TRANSGLOLOGISTICS CODE.</h2>
+                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-10 uppercase italic">THE VANGUARD FREIGHT CODE.</h2>
                         <p className="text-2xl text-white/40 font-black uppercase tracking-tight max-w-2xl leading-tight">WE DON'T JUST BUILD SOFTWARE. WE ENGINEER THE PLANETARY INFRASTRUCTURE OF TOMORROW'S VELOCITY.</p>
                     </div>
 
