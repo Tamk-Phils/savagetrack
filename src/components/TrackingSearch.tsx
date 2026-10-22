@@ -241,24 +241,24 @@ export default function TrackingSearch() {
                         className="mt-10 bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden text-slate-800"
                     >
                         {/* Status Header Banner */}
-                        <div className="bg-slate-900 p-8 md:p-10 flex flex-wrap justify-between items-center gap-6 text-white">
+                        <div className="bg-slate-900 p-5 sm:p-8 md:p-10 flex flex-wrap justify-between items-center gap-4 sm:gap-6 text-white">
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(225,29,72,0.9)]" />
+                                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(225,29,72,0.9)] shrink-0" />
                                     <p className="text-emerald-400 text-xs font-mono font-bold uppercase tracking-widest">TRANSWORLD LOGISTICS LIVE</p>
                                 </div>
-                                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                                     {result.current_status || "IN TRANSIT"}
                                 </h2>
                             </div>
 
-                            <div className="flex flex-col items-start sm:items-end gap-2">
+                            <div className="flex flex-col items-start sm:items-end gap-2 w-full sm:w-auto">
                                 <p className="text-slate-400 text-[10px] font-mono font-bold uppercase tracking-wider">TRACKING NUMBER</p>
-                                <div className="flex items-center gap-3 bg-white/10 border border-white/10 px-4 py-2 rounded-xl">
-                                    <span className="text-white font-mono font-extrabold text-base md:text-lg tracking-wider">{result.tracking_number}</span>
+                                <div className="flex items-center justify-between sm:justify-start gap-3 bg-white/10 border border-white/10 px-4 py-2 rounded-xl w-full sm:w-auto">
+                                    <span className="text-white font-mono font-extrabold text-sm sm:text-base md:text-lg tracking-wider break-all">{result.tracking_number}</span>
                                     <button
                                         onClick={() => handleCopy(result.tracking_number)}
-                                        className={`p-1.5 rounded-lg transition-all ${isCopying ? 'text-emerald-400 bg-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-white/10'}`}
+                                        className={`p-1.5 rounded-lg transition-all shrink-0 ${isCopying ? 'text-emerald-400 bg-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-white/10'}`}
                                         title="Copy Tracking ID"
                                     >
                                         {isCopying ? <Check size={16} /> : <Copy size={16} />}
@@ -267,9 +267,9 @@ export default function TrackingSearch() {
                             </div>
                         </div>
 
-                        <div className="p-8 md:p-12 space-y-10">
+                        <div className="p-4 sm:p-8 md:p-12 space-y-8 md:space-y-10">
                             {/* Route Indicator */}
-                            <div className="p-6 md:p-8 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+                            <div className="p-5 md:p-8 rounded-2xl bg-emerald-50/60 border border-emerald-100">
                                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                                     <div className="text-center md:text-left space-y-1">
                                         <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">ORIGIN</p>
@@ -285,9 +285,9 @@ export default function TrackingSearch() {
                                                 className="h-full bg-emerald-700 rounded-full"
                                             />
                                         </div>
-                                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700">
-                                            <Truck size={14} className="animate-pulse" />
-                                            En Route via Transworld Logistics Transit Network
+                                        <div className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700 text-center">
+                                            <Truck size={14} className="animate-pulse shrink-0" />
+                                            <span>En Route via Transworld Logistics Transit Network</span>
                                         </div>
                                     </div>
 
@@ -300,12 +300,12 @@ export default function TrackingSearch() {
 
                             {/* Optional Live Satellite GPS Map Toggle */}
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm">
-                                    <div className="flex items-center gap-3.5">
-                                        <div className="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-md">
-                                            <Globe size={20} />
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                    <div className="flex items-center gap-3.5 min-w-0">
+                                        <div className="w-10 h-10 shrink-0 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-md">
+                                            <Globe size={20} className="shrink-0" />
                                         </div>
-                                        <div>
+                                        <div className="min-w-0">
                                             <h4 className="font-extrabold text-slate-900 text-sm md:text-base">Interactive Satellite GPS Map</h4>
                                             <p className="text-slate-500 text-xs font-medium">Real-time route telemetry & transit tracking (Optional)</p>
                                         </div>
@@ -314,15 +314,15 @@ export default function TrackingSearch() {
                                     <button
                                         type="button"
                                         onClick={() => setShowMap(!showMap)}
-                                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer shadow-sm ${
+                                        className={`w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer shadow-sm ${
                                             showMap 
                                                 ? 'bg-emerald-700 text-white border-emerald-700 hover:bg-emerald-800' 
                                                 : 'bg-white text-slate-700 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
                                         }`}
                                     >
-                                        <MapPin size={15} />
+                                        <MapPin size={15} className="shrink-0" />
                                         <span>{showMap ? "Hide Satellite Map" : "View Satellite Map"}</span>
-                                        <ChevronDown size={15} className={`transition-transform duration-300 ${showMap ? "rotate-180" : ""}`} />
+                                        <ChevronDown size={15} className={`shrink-0 transition-transform duration-300 ${showMap ? "rotate-180" : ""}`} />
                                     </button>
                                 </div>
 
@@ -335,10 +335,10 @@ export default function TrackingSearch() {
                                             transition={{ duration: 0.3 }}
                                             className="overflow-hidden"
                                         >
-                                            <div className="h-[400px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
-                                                <div className="absolute top-4 left-4 z-[400] bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-white flex items-center gap-3">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                    <span className="text-xs font-bold uppercase tracking-wider">TRANSWORLD LOGISTICS LIVE SATELLITE GPS</span>
+                                            <div className="h-[320px] sm:h-[400px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
+                                                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[400] bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white flex items-center gap-2 sm:gap-3 max-w-[90%]">
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                                                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">TRANSWORLD LOGISTICS LIVE SATELLITE GPS</span>
                                                 </div>
                                                 <LiveMap
                                                     lat={result.latitude}
@@ -363,25 +363,25 @@ export default function TrackingSearch() {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 <div className="lg:col-span-2 space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                                        <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 min-w-0 overflow-hidden">
                                             <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
-                                                <User size={16} /> Sender Information
+                                                <User size={16} className="shrink-0" /> Sender Information
                                             </div>
                                             <p className="text-xs text-slate-400 font-medium">NAME</p>
-                                            <p className="text-slate-900 font-bold text-base">{result.sender_name || 'N/A'}</p>
-                                            <p className="text-slate-500 text-xs flex items-center gap-2 pt-1">
-                                                <Mail size={13} className="text-emerald-600" />
-                                                {result.sender_email || 'N/A'}
+                                            <p className="text-slate-900 font-bold text-base break-words">{result.sender_name || 'N/A'}</p>
+                                            <p className="text-slate-500 text-xs flex items-center gap-2 pt-1 min-w-0">
+                                                <Mail size={13} className="text-emerald-600 shrink-0" />
+                                                <span className="break-all font-medium">{result.sender_email || 'N/A'}</span>
                                             </p>
                                         </div>
 
-                                        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                                        <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 min-w-0 overflow-hidden">
                                             <div className="flex items-center gap-2 text-emerald-700 text-xs font-bold uppercase tracking-wider pb-2 border-b border-slate-200">
-                                                <MapPin size={16} /> Recipient Information
+                                                <MapPin size={16} className="shrink-0" /> Recipient Information
                                             </div>
                                             <p className="text-xs text-slate-400 font-medium">RECIPIENT NAME</p>
-                                            <p className="text-slate-900 font-bold text-base">{result.recipient_name || 'N/A'}</p>
-                                            <p className="text-slate-600 text-xs leading-relaxed pt-1 font-medium">
+                                            <p className="text-slate-900 font-bold text-base break-words">{result.recipient_name || 'N/A'}</p>
+                                            <p className="text-slate-600 text-xs leading-relaxed pt-1 font-medium break-words">
                                                 {result.recipient_address || 'Address registered'}
                                             </p>
                                         </div>
