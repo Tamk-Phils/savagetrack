@@ -350,6 +350,8 @@ export default function TrackingSearch() {
                                                     destinationLng={result.destination_lng}
                                                     destinationName={result.destination}
                                                     currentLocationName={result.updates?.[0]?.location || result.origin}
+                                                    trackingNumber={result.tracking_number}
+                                                    status={result.current_status}
                                                 />
                                             </div>
                                         </motion.div>
