@@ -100,14 +100,9 @@ export default function Header() {
                     <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/30 group-hover:scale-105 transition-transform duration-200">
                         <Navigation size={20} className="transform rotate-45 sm:w-[22px] sm:h-[22px]" />
                     </div>
-                    <div className="flex flex-col">
-                        <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-display">
-                            Vanguard Freight <span className="text-emerald-700">Logistics</span>
-                        </span>
-                        <span className="text-[9px] sm:text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest -mt-1">
-                            Locate Your Parcel Anywhere Anytime
-                        </span>
-                    </div>
+                    <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-display">
+                        Vanguard Freight <span className="text-emerald-700">Logistics</span>
+                    </span>
                 </Link>
 
                 {/* Desktop Navigation Links */}
