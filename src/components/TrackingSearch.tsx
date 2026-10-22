@@ -36,7 +36,7 @@ export default function TrackingSearch() {
             origin: "Frankfurt Hub, Germany",
             destination: "JFK Airport, New York, USA",
             sender_name: "Global Logistics Freight Corp",
-            sender_email: "supportdesk@transworldlogististics.org",
+            sender_email: "supportdesk@transworldlogistics.org",
             recipient_name: "Robert Vance & Partners",
             recipient_email: "r.vance@vanceglobal.com",
             recipient_address: "350 Fifth Avenue, Suite 4200, New York, NY 10118",

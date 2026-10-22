@@ -8,7 +8,7 @@ const replacements = [
     { regex: /SWIFTLINK SHIPPING/g, replacement: 'TRANSWORLD LOGISTICS' },
     { regex: /SwiftLink/g, replacement: 'Transworld Logistics' },
     { regex: /SWIFTLINK/g, replacement: 'TRANSWORLD LOGISTICS' },
-    { regex: /swiftlinkshipping\.com/g, replacement: 'transworldlogististics.org' },
+    { regex: /swiftlinkshipping\.com/g, replacement: 'transworldlogistics.org' },
     { regex: /swiftlink/g, replacement: 'transworldlogistics' },
     { regex: /Vortex Shipping/g, replacement: 'Transworld Logistics' },
     { regex: /VORTEX SHIPPING/g, replacement: 'TRANSWORLD LOGISTICS' },

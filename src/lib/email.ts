@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 function getTransporter() {
     const host = process.env.SMTP_HOST || 'mail.spacemail.com';
     const port = parseInt(process.env.SMTP_PORT || '465');
-    const user = process.env.SMTP_USER || 'supportdesk@transworldlogististics.org';
+    const user = process.env.SMTP_USER || 'supportdesk@transworldlogistics.org';
     const pass = process.env.SMTP_PASS || 'Marc1234?';
 
     return nodemailer.createTransport({
@@ -44,10 +44,10 @@ interface UpdateShipmentParams extends BaseEmailParams {
     description: string;
 }
 
-const getTrackingLink = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://transworldlogististics.org"}/tracking`;
+const getTrackingLink = () => `${process.env.NEXT_PUBLIC_APP_URL || "https://transworldlogistics.org"}/tracking`;
 
 function getMailIdentity() {
-    const address = (process.env.FROM_EMAIL || process.env.SMTP_USER || "supportdesk@transworldlogististics.org").trim();
+    const address = (process.env.FROM_EMAIL || process.env.SMTP_USER || "supportdesk@transworldlogistics.org").trim();
     return {
         address,
         name: process.env.FROM_NAME || "Transworld Logistics"
@@ -132,7 +132,7 @@ Destination: ${destination}
 Track your package online at: ${trackingLink}
 
 Thank you for choosing Transworld Logistics.
-Support Email: supportdesk@transworldlogististics.org
+Support Email: supportdesk@transworldlogistics.org
 `;
 
     if (!recipient) {
@@ -229,7 +229,7 @@ Details: ${description || 'No additional variance reported.'}
 
 Track package online at: ${trackingLink}
 
-Support Email: supportdesk@transworldlogististics.org
+Support Email: supportdesk@transworldlogistics.org
 `;
 
     if (!recipient) {

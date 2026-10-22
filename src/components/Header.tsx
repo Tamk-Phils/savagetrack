@@ -72,9 +72,9 @@ export default function Header() {
             <div className="bg-slate-900 text-slate-300 text-xs py-2 px-6 border-b border-slate-800 hidden md:block">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-6">
-                        <a href="mailto:supportdesk@transworldlogististics.org" className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
+                        <a href="mailto:supportdesk@transworldlogistics.org" className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
                             <Mail size={14} className="text-emerald-400" />
-                            <span>supportdesk@transworldlogististics.org</span>
+                            <span>supportdesk@transworldlogistics.org</span>
                         </a>
                         <div className="flex items-center gap-2 text-slate-400">
                             <Clock size={14} className="text-emerald-400" />

@@ -318,7 +318,7 @@ export default function AddShipment() {
                                         <input
                                             type="email"
                                             required
-                                            placeholder="admin@transworldlogististics.org"
+                                            placeholder="admin@transworldlogistics.org"
                                             className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:border-primary font-bold text-xs text-slate-900 outline-none"
                                             value={formData.sender_email}
                                             onChange={(e) => setFormData({ ...formData, sender_email: e.target.value })}

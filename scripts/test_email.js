@@ -23,7 +23,7 @@ async function createTransporter(port, secure) {
         port: port,
         secure: secure,
         auth: {
-            user: process.env.SMTP_USER || 'supportdesk@transworldlogististics.org',
+            user: process.env.SMTP_USER || 'supportdesk@transworldlogistics.org',
             pass: process.env.SMTP_PASS || 'Marc1234?',
         },
         connectionTimeout: 10000,
@@ -69,14 +69,14 @@ async function runSmtpTest() {
     const trackingNumber = `SWL${Math.floor(100000000 + Math.random() * 900000000)}`;
 
     const mailOptions = {
-        from: `"${process.env.FROM_NAME || 'Transworld Logistics'}" <${process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogististics.org'}>`,
+        from: `"${process.env.FROM_NAME || 'Transworld Logistics'}" <${process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogistics.org'}>`,
         to: targetEmail,
-        replyTo: process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogististics.org',
+        replyTo: process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogistics.org',
         subject: `Transworld Logistics: Delivery Notification ${trackingNumber}`,
         headers: {
             'X-Mailer': 'Transworld Logistics-Shipping/1.0',
             'Auto-Submitted': 'auto-generated',
-            'List-Unsubscribe': `<mailto:supportdesk@transworldlogististics.org?subject=unsubscribe>`
+            'List-Unsubscribe': `<mailto:supportdesk@transworldlogistics.org?subject=unsubscribe>`
         },
         html: `
             <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
@@ -121,7 +121,7 @@ async function runSmtpTest() {
                     </table>
 
                     <div style="text-align: center; margin-top: 30px;">
-                        <a href="https://transworldlogististics.org/tracking" style="background-color: #0070F3; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; display: inline-block;">Access Tracking Portal</a>
+                        <a href="https://transworldlogistics.org/tracking" style="background-color: #0070F3; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; display: inline-block;">Access Tracking Portal</a>
                     </div>
                 </div>
                 <div style="text-align: center; padding: 20px; border-top: 1px solid #f1f5f9; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase;">

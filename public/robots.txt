@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://transworldlogististics.org/sitemap.xml
+Sitemap: https://transworldlogistics.org/sitemap.xml

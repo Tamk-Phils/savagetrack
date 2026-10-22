@@ -70,7 +70,7 @@ export default function TermsPage() {
                                 FULLY COMPLIANT PLATFORM
                             </div>
                         </div>
-                        <a href="mailto:supportdesk@transworldlogististics.org" className="bg-slate-900 px-12 py-5 rounded-sm font-black text-white text-[10px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl">
+                        <a href="mailto:supportdesk@transworldlogistics.org" className="bg-slate-900 px-12 py-5 rounded-sm font-black text-white text-[10px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl">
                             CONTACT COMPLIANCE
                         </a>
                     </section>

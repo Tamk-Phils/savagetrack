@@ -35,8 +35,8 @@ export default function ContactPage() {
                         </div>
                         <span className="text-xs font-black uppercase tracking-wider text-slate-400">EMAIL SUPPORT</span>
                         <h3 className="text-xl font-black text-slate-900">Official Email</h3>
-                        <a href="mailto:supportdesk@transworldlogististics.org" className="text-emerald-700 font-extrabold text-sm block hover:underline break-all">
-                            supportdesk@transworldlogististics.org
+                        <a href="mailto:supportdesk@transworldlogistics.org" className="text-emerald-700 font-extrabold text-sm block hover:underline break-all">
+                            supportdesk@transworldlogistics.org
                         </a>
                     </div>
 

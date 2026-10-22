@@ -80,7 +80,7 @@ export default function Footer() {
                         <div className="space-y-2.5 text-xs text-slate-300 font-medium pt-1">
                             <div className="flex items-center gap-3 text-slate-400">
                                 <Mail size={14} className="text-emerald-400 shrink-0" />
-                                <span>supportdesk@transworldlogististics.org</span>
+                                <span>supportdesk@transworldlogistics.org</span>
                             </div>
                         </div>
 

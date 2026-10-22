@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://transworldlogististics.org"),
+  metadataBase: new URL("https://transworldlogistics.org"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "Transworld Logistics | Global Freight & Package Tracking",
     description: "Global logistics, express air transit, ocean freight, and real-time package tracking. Fast, secure delivery with Transworld Logistics.",
-    url: "https://transworldlogististics.org",
+    url: "https://transworldlogistics.org",
     siteName: "Transworld Logistics",
     images: [
       {
@@ -76,12 +76,12 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LogisticsService",
   "name": "Transworld Logistics",
-  "url": "https://transworldlogististics.org",
-  "logo": "https://transworldlogististics.org/favicon.ico",
+  "url": "https://transworldlogistics.org",
+  "logo": "https://transworldlogistics.org/favicon.ico",
   "description": "Global freight forwarding, air transit, and real-time package tracking portal.",
-  "email": "supportdesk@transworldlogististics.org",
+  "email": "supportdesk@transworldlogistics.org",
   "sameAs": [
-    "https://transworldlogististics.org"
+    "https://transworldlogistics.org"
   ],
   "areaServed": "Worldwide"
 };
