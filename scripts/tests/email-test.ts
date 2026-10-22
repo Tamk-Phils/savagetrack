@@ -9,8 +9,8 @@ import { sendShipmentCreatedEmail, sendShipmentUpdateEmail } from '../../src/lib
 async function runEmailTests() {
     console.log("--- TRANSWORLD LOGISTICS EMAIL TEST PROTOCOL ---");
     
-    const testRecipient = process.env.SMTP_USER || "test@example.com";
-    const trackingNumber = "VTX-TEST-999-LOG";
+    const testRecipient = process.argv[2] || process.env.TEST_EMAIL || "phils7872@gmail.com";
+    const trackingNumber = "TWL-8829-NYC-X";
 
     console.log(`Target Node: ${testRecipient}`);
 
