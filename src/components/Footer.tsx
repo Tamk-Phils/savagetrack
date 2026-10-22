@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, ArrowRight, Navigation, ShieldCheck, Phone, MapPin } from "lucide-react";
+import { Mail, ArrowRight, Navigation, ShieldCheck, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -81,10 +81,6 @@ export default function Footer() {
                             <div className="flex items-center gap-3 text-slate-400">
                                 <Mail size={14} className="text-emerald-400 shrink-0" />
                                 <span>supportdesk@transworldlogististics.org</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-slate-400">
-                                <Phone size={14} className="text-emerald-400 shrink-0" />
-                                <span>+1 254-966-4186</span>
                             </div>
                         </div>
 

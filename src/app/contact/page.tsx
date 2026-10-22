@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, MessageSquare, Phone, MapPin, Globe, Send, Zap, Clock } from "lucide-react";
+import { Mail, MessageSquare, MapPin, Globe, Send, Zap, Clock } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -27,8 +27,8 @@ export default function ContactPage() {
             </div>
 
             <div className="max-w-7xl mx-auto px-6">
-                {/* 3 Contact Info Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                {/* Contact Info Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
                     <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-4 hover:shadow-xl transition-all">
                         <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                             <Mail size={26} />
@@ -38,17 +38,6 @@ export default function ContactPage() {
                         <a href="mailto:supportdesk@transworldlogististics.org" className="text-emerald-700 font-extrabold text-sm block hover:underline break-all">
                             supportdesk@transworldlogististics.org
                         </a>
-                    </div>
-
-                    <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-4 hover:shadow-xl transition-all">
-                        <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                            <Phone size={26} />
-                        </div>
-                        <span className="text-xs font-black uppercase tracking-wider text-slate-400">HOTLINE</span>
-                        <h3 className="text-xl font-black text-slate-900">Phone Support</h3>
-                        <p className="text-emerald-700 font-extrabold text-sm">
-                            +1 254-966-4186
-                        </p>
                     </div>
 
                     <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-4 hover:shadow-xl transition-all">

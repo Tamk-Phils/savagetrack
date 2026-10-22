@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Menu, X, Navigation, Globe, ChevronDown, ChevronRight, User, Mail, Phone, Clock, ArrowRight, Search, ShieldCheck } from "lucide-react";
+import { Menu, X, Navigation, Globe, ChevronDown, ChevronRight, User, Mail, Clock, ArrowRight, Search, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -76,10 +76,6 @@ export default function Header() {
                             <Mail size={14} className="text-emerald-400" />
                             <span>supportdesk@transworldlogististics.org</span>
                         </a>
-                        <div className="flex items-center gap-2">
-                            <Phone size={14} className="text-emerald-400" />
-                            <span>+1 254-966-4186</span>
-                        </div>
                         <div className="flex items-center gap-2 text-slate-400">
                             <Clock size={14} className="text-emerald-400" />
                             <span>24/7 Satellite Global Dispatch</span>
