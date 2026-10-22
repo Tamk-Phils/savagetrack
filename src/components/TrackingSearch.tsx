@@ -1,29 +1,42 @@
 "use client";
 
 import React, { Component, ReactNode, useState } from "react";
-import { Package, MapPin, AlertCircle, User, FileText, Mail, Copy, Check, ChevronRight, Zap, Download, Sparkles, Clock, Truck, ShieldCheck, Headphones, Bell, Globe, ChevronDown } from "lucide-react";
+import { Package, MapPin, AlertCircle, User, FileText, Mail, Copy, Check, ChevronRight, Zap, Download, Sparkles, Clock, Truck, ShieldCheck, Headphones, Bell, Globe, ChevronDown, Navigation } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Shipment, ShipmentUpdate } from "@/types";
 import dynamic from "next/dynamic";
 
-class MapErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+class MapErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; errorMsg?: string }> {
     constructor(props: { children: ReactNode }) {
         super(props);
         this.state = { hasError: false };
     }
-    static getDerivedStateFromError() {
-        return { hasError: true };
+    static getDerivedStateFromError(error: any) {
+        return { hasError: true, errorMsg: error?.message || String(error) };
     }
-    componentDidCatch(error: any) {
-        console.error("Map rendering error caught:", error);
+    componentDidCatch(error: any, info: any) {
+        console.error("Map rendering error caught:", error, info);
     }
     render() {
         if (this.state.hasError) {
             return (
-                <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-2 p-6 text-center">
-                    <p className="text-sm font-bold text-emerald-400">Satellite Map Telemetry Active</p>
-                    <p className="text-xs text-slate-400">Unable to load interactive map tiles in this browser mode.</p>
+                <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-3 p-6 text-center border border-slate-800">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                        <Navigation size={20} className="transform rotate-45" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-bold text-emerald-400">Satellite Map Telemetry Active</p>
+                        <p className="text-xs text-slate-400 mt-1 max-w-sm">Interactive map connection initialized or resetting.</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => this.setState({ hasError: false })}
+                        className="mt-1 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
+                    >
+                        <Zap size={13} />
+                        <span>Reload Satellite Radar</span>
+                    </button>
                 </div>
             );
         }
@@ -361,29 +374,27 @@ export default function TrackingSearch() {
                                 <AnimatePresence>
                                     {showMap && (
                                         <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: "auto", opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="overflow-hidden"
+                                            initial={{ opacity: 0, scale: 0.98 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.98 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="h-[350px] sm:h-[440px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative"
                                         >
-                                            <div className="h-[350px] sm:h-[440px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
-                                                <MapErrorBoundary>
-                                                    <LiveMap
-                                                        lat={result.latitude}
-                                                        lng={result.longitude}
-                                                        originLat={result.origin_lat}
-                                                        originLng={result.origin_lng}
-                                                        originName={result.origin}
-                                                        destinationLat={result.destination_lat}
-                                                        destinationLng={result.destination_lng}
-                                                        destinationName={result.destination}
-                                                        currentLocationName={result.updates?.[0]?.location || result.origin}
-                                                        trackingNumber={result.tracking_number}
-                                                        status={result.current_status}
-                                                    />
-                                                </MapErrorBoundary>
-                                            </div>
+                                            <MapErrorBoundary>
+                                                <LiveMap
+                                                    lat={result.latitude}
+                                                    lng={result.longitude}
+                                                    originLat={result.origin_lat}
+                                                    originLng={result.origin_lng}
+                                                    originName={result.origin}
+                                                    destinationLat={result.destination_lat}
+                                                    destinationLng={result.destination_lng}
+                                                    destinationName={result.destination}
+                                                    currentLocationName={result.updates?.[0]?.location || result.origin}
+                                                    trackingNumber={result.tracking_number}
+                                                    status={result.current_status}
+                                                />
+                                            </MapErrorBoundary>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>

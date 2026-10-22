@@ -1,15 +1,24 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { getCoordsFromLocationName } from '@/lib/geocoding';
-import { Maximize2, Minimize2, Navigation, MapPin, Compass, ShieldCheck, ArrowRight, Zap, RefreshCw, Plus, Minus } from 'lucide-react';
+import { Maximize2, Minimize2, Navigation, Compass, Plus, Minus } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 
+// Fix Leaflet's default marker icons in Next.js/Webpack/Turbopack
+if (typeof window !== 'undefined') {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
+}
+
 // Origin Icon (Start Point)
-const originIcon = L.divIcon({
+const originIcon = typeof window !== 'undefined' ? L.divIcon({
     html: `
         <div class="relative flex items-center justify-center">
             <div class="w-8 h-8 bg-emerald-500/20 rounded-full animate-ping absolute"></div>
@@ -24,10 +33,10 @@ const originIcon = L.divIcon({
     className: 'custom-origin-icon',
     iconSize: [28, 28],
     iconAnchor: [14, 14],
-});
+}) : (null as any);
 
 // Destination Icon (End Point)
-const destinationIcon = L.divIcon({
+const destinationIcon = typeof window !== 'undefined' ? L.divIcon({
     html: `
         <div class="relative flex items-center justify-center">
             <div class="w-8 h-8 bg-indigo-500/20 rounded-full animate-ping absolute"></div>
@@ -42,10 +51,10 @@ const destinationIcon = L.divIcon({
     className: 'custom-dest-icon',
     iconSize: [28, 28],
     iconAnchor: [14, 14],
-});
+}) : (null as any);
 
 // Moving Package Icon
-const movingTruckIcon = L.divIcon({
+const movingTruckIcon = typeof window !== 'undefined' ? L.divIcon({
     html: `
         <div class="relative flex items-center justify-center">
             <div class="absolute w-12 h-12 bg-emerald-500/30 rounded-full animate-ping"></div>
@@ -61,7 +70,7 @@ const movingTruckIcon = L.divIcon({
     className: 'custom-moving-icon',
     iconSize: [40, 40],
     iconAnchor: [20, 20],
-});
+}) : (null as any);
 
 interface LiveMapProps {
     lat?: number;
@@ -78,18 +87,19 @@ interface LiveMapProps {
     zoom?: number;
 }
 
-// Map Instance Bridge to connect Leaflet instance to outside controls safely without DOM injection
-function MapInstanceBridge({ onMap }: { onMap: (map: L.Map) => void }) {
+// Stores map instance in a mutable ref - ZERO state triggers, 100% safe across all browsers
+function MapBridge({ mapRef }: { mapRef: React.MutableRefObject<L.Map | null> }) {
     const map = useMap();
     useEffect(() => {
-        if (map) {
-            onMap(map);
-        }
-    }, [map, onMap]);
+        mapRef.current = map;
+        return () => {
+            mapRef.current = null;
+        };
+    }, [map, mapRef]);
     return null;
 }
 
-// Map Controller Component for view switching - Does NOT override manual user zooming!
+// Map Controller Component for view switching & smooth size invalidation
 function MapFocusController({ 
     currentCoords, 
     viewMode, 
@@ -108,19 +118,24 @@ function MapFocusController({
 
     // Invalidate size safely on mount and on fullscreen change
     useEffect(() => {
-        const t1 = setTimeout(() => {
+        const checkAndInvalidate = () => {
             try {
-                map.invalidateSize();
+                const container = map.getContainer();
+                if (container && container.clientHeight > 0 && container.clientWidth > 0) {
+                    map.invalidateSize();
+                }
             } catch {}
-        }, 150);
-        const t2 = setTimeout(() => {
-            try {
-                map.invalidateSize();
-            } catch {}
-        }, 400);
+        };
+
+        checkAndInvalidate();
+        const t1 = setTimeout(checkAndInvalidate, 80);
+        const t2 = setTimeout(checkAndInvalidate, 250);
+        const t3 = setTimeout(checkAndInvalidate, 600);
+
         return () => {
             clearTimeout(t1);
             clearTimeout(t2);
+            clearTimeout(t3);
         };
     }, [isFullscreen, map]);
 
@@ -162,6 +177,58 @@ function MapFocusController({
     return null;
 }
 
+// Self-contained moving truck marker: animates smoothly WITHOUT re-rendering the parent map
+function MovingTruckMarker({ 
+    startCoords, 
+    currentCoords, 
+    destCoords,
+    currentLocationName
+}: { 
+    startCoords: [number, number]; 
+    currentCoords: [number, number]; 
+    destCoords: [number, number];
+    currentLocationName?: string;
+}) {
+    const [pos, setPos] = useState<[number, number]>(startCoords);
+
+    useEffect(() => {
+        let progress = 0;
+        const speed = 0.003;
+
+        const interval = setInterval(() => {
+            progress += speed;
+            if (progress > 1) progress = 0;
+
+            let newLat: number, newLng: number;
+            if (progress <= 0.65) {
+                const t = progress / 0.65;
+                newLat = startCoords[0] + (currentCoords[0] - startCoords[0]) * t;
+                newLng = startCoords[1] + (currentCoords[1] - startCoords[1]) * t;
+            } else {
+                const t = (progress - 0.65) / 0.35;
+                newLat = currentCoords[0] + (destCoords[0] - currentCoords[0]) * t;
+                newLng = currentCoords[1] + (destCoords[1] - currentCoords[1]) * t;
+            }
+
+            setPos([newLat, newLng]);
+        }, 80);
+
+        return () => clearInterval(interval);
+    }, [startCoords[0], startCoords[1], currentCoords[0], currentCoords[1], destCoords[0], destCoords[1]]);
+
+    if (!movingTruckIcon) return null;
+
+    return (
+        <Marker position={pos} icon={movingTruckIcon}>
+            <Popup>
+                <div className="font-bold text-xs uppercase text-slate-900">
+                    Current Location: {currentLocationName || "In Transit"}
+                </div>
+            </Popup>
+        </Marker>
+    );
+}
+
 export default function LiveMap({
     lat,
     lng,
@@ -174,14 +241,11 @@ export default function LiveMap({
     currentLocationName,
     trackingNumber,
     status,
-    zoom = 13
 }: LiveMapProps) {
     const [isMounted, setIsMounted] = useState(false);
     const [viewMode, setViewMode] = useState<'package' | 'route'>('package');
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const fullscreenRef = useRef<HTMLDivElement>(null);
-
-    const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
+    const mapRef = useRef<L.Map | null>(null);
 
     // Resolve Origin Coordinates with NaN safety
     let startCoords: [number, number] = [32.7767, -96.7970]; // Default Dallas
@@ -214,46 +278,14 @@ export default function LiveMap({
         currentCoords = [(startCoords[0] + destCoords[0]) / 2, (startCoords[1] + destCoords[1]) / 2];
     }
 
-    // Animated moving position along the route
-    const [movingPos, setMovingPos] = useState<[number, number]>(startCoords);
-
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    // Animate moving package icon along route
-    useEffect(() => {
-        if (!isMounted) return;
-
-        let progress = 0;
-        const speed = 0.005;
-
-        const interval = setInterval(() => {
-            progress += speed;
-            if (progress > 1) progress = 0;
-
-            let newLat: number, newLng: number;
-            if (progress <= 0.65) {
-                const t = progress / 0.65;
-                newLat = startCoords[0] + (currentCoords[0] - startCoords[0]) * t;
-                newLng = startCoords[1] + (currentCoords[1] - startCoords[1]) * t;
-            } else {
-                const t = (progress - 0.65) / 0.35;
-                newLat = currentCoords[0] + (destCoords[0] - currentCoords[0]) * t;
-                newLng = currentCoords[1] + (destCoords[1] - currentCoords[1]) * t;
-            }
-
-            setMovingPos([newLat, newLng]);
-        }, 60);
-
-        return () => clearInterval(interval);
-    }, [isMounted, startCoords[0], startCoords[1], currentCoords[0], currentCoords[1], destCoords[0], destCoords[1]]);
-
-    // Handle Escape key and body scroll lock in Fullscreen
+    // Handle Escape key and body scroll lock when Fullscreen is active
     useEffect(() => {
         if (!isFullscreen) return;
 
-        // Lock background body scroll
         const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
 
@@ -263,11 +295,8 @@ export default function LiveMap({
                     const doc = document as any;
                     if (doc.fullscreenElement || doc.webkitFullscreenElement) {
                         try {
-                            if (typeof doc.exitFullscreen === 'function') {
-                                doc.exitFullscreen();
-                            } else if (typeof doc.webkitExitFullscreen === 'function') {
-                                doc.webkitExitFullscreen();
-                            }
+                            if (typeof doc.exitFullscreen === 'function') doc.exitFullscreen();
+                            else if (typeof doc.webkitExitFullscreen === 'function') doc.webkitExitFullscreen();
                         } catch {}
                     }
                 }
@@ -297,22 +326,20 @@ export default function LiveMap({
     }, [isFullscreen]);
 
     const toggleFullscreen = useCallback(async () => {
-        if (!isFullscreen) {
-            setIsFullscreen(true);
-            try {
-                if (typeof document !== 'undefined') {
-                    const docEl = document.documentElement as any;
+        const nextFs = !isFullscreen;
+        setIsFullscreen(nextFs);
+
+        try {
+            if (typeof document !== 'undefined') {
+                const docEl = document.documentElement as any;
+                const doc = document as any;
+                if (nextFs) {
                     if (docEl && typeof docEl.requestFullscreen === 'function') {
                         await docEl.requestFullscreen();
                     } else if (docEl && typeof docEl.webkitRequestFullscreen === 'function') {
                         await docEl.webkitRequestFullscreen();
                     }
-                }
-            } catch {}
-        } else {
-            if (typeof document !== 'undefined') {
-                try {
-                    const doc = document as any;
+                } else {
                     if (doc.fullscreenElement || doc.webkitFullscreenElement) {
                         if (typeof doc.exitFullscreen === 'function') {
                             await doc.exitFullscreen();
@@ -320,13 +347,22 @@ export default function LiveMap({
                             await doc.webkitExitFullscreen();
                         }
                     }
-                } catch {}
+                }
             }
-            setIsFullscreen(false);
-        }
-    }, [isFullscreen]);
+        } catch {}
 
-    if (!isMounted) return <div className="w-full h-full bg-slate-100 animate-pulse rounded-sm" />;
+        // Schedule smooth map size invalidation
+        setTimeout(() => {
+            try {
+                mapRef.current?.invalidateSize();
+            } catch {}
+        }, 100);
+        setTimeout(() => {
+            try {
+                mapRef.current?.invalidateSize();
+            } catch {}
+        }, 300);
+    }, [isFullscreen]);
 
     const bounds: L.LatLngBoundsExpression = useMemo(() => [
         startCoords,
@@ -334,188 +370,248 @@ export default function LiveMap({
         destCoords
     ], [startCoords[0], startCoords[1], currentCoords[0], currentCoords[1], destCoords[0], destCoords[1]]);
 
-    // Core Map Elements
-    const renderMapElements = () => (
-        <>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+    if (!isMounted) {
+        return (
+            <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-3 p-6 text-center border border-slate-800">
+                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs text-slate-400 font-mono">INITIALIZING SATELLITE RADAR...</p>
+            </div>
+        );
+    }
 
-            {/* Traversed Path: Origin -> Current Location */}
-            <Polyline
-                positions={[startCoords, currentCoords]}
-                pathOptions={{ color: '#059669', weight: 6, opacity: 0.9 }}
-            />
-
-            {/* Remaining Path: Current Location -> Destination */}
-            <Polyline
-                positions={[currentCoords, destCoords]}
-                pathOptions={{ color: '#64748B', weight: 4, dashArray: '8, 10', opacity: 0.6 }}
-            />
-
-            {/* Start Marker */}
-            <Marker position={startCoords} icon={originIcon}>
-                <Popup>
-                    <div className="font-bold text-xs uppercase text-slate-900">
-                        Origin: {originName || "Start Location"}
-                    </div>
-                </Popup>
-            </Marker>
-
-            {/* Destination Marker */}
-            <Marker position={destCoords} icon={destinationIcon}>
-                <Popup>
-                    <div className="font-bold text-xs uppercase text-slate-900">
-                        Destination: {destinationName || "Final Destination"}
-                    </div>
-                </Popup>
-            </Marker>
-
-            {/* Moving Package Marker */}
-            <Marker position={movingPos} icon={movingTruckIcon}>
-                <Popup>
-                    <div className="font-bold text-xs uppercase text-slate-900">
-                        Current Location: {currentLocationName || "In Transit"}
-                    </div>
-                </Popup>
-            </Marker>
-
-            <MapFocusController 
-                currentCoords={currentCoords} 
-                viewMode={viewMode} 
-                bounds={bounds} 
-                isFullscreen={isFullscreen} 
-            />
-
-            <MapInstanceBridge onMap={setMapInstance} />
-        </>
-    );
-
-    // Fullscreen View - Portaled to document.body to break out of all overflow-hidden and transform contexts
-    const renderFullscreenView = () => (
+    return (
         <div 
-            ref={fullscreenRef}
-            className="fixed inset-0 z-[999999] bg-slate-950 flex flex-col w-screen h-screen overflow-hidden select-none"
+            className={
+                isFullscreen 
+                    ? "fixed inset-0 z-[999999] bg-slate-950 flex flex-col w-screen h-screen overflow-hidden select-none" 
+                    : "w-full h-full relative"
+            }
         >
-            {/* Top Navigation & Status Bar */}
-            <header className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between text-white shrink-0 shadow-2xl z-[1000] gap-4">
-                {/* Brand & Telemetry Badge */}
-                <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                        <Navigation size={18} className="transform rotate-45 animate-pulse" />
-                    </div>
-                    <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
-                            <h2 className="text-xs sm:text-sm font-black tracking-tight uppercase truncate text-white">
-                                Transworld Logistics Satellite Radar
-                            </h2>
-                            {trackingNumber && (
-                                <span className="hidden md:inline px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] font-bold">
-                                    {trackingNumber}
-                                </span>
-                            )}
+            {/* FULLSCREEN TOP BAR */}
+            {isFullscreen ? (
+                <header className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between text-white shrink-0 shadow-2xl z-[1000] gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                            <Navigation size={18} className="transform rotate-45 animate-pulse" />
                         </div>
-                        <p className="text-[10px] sm:text-xs text-slate-400 font-medium truncate flex items-center gap-2">
-                            <span>{originName || "Origin"}</span>
-                            <span className="text-emerald-400 font-bold">➔</span>
-                            <span>{destinationName || "Destination"}</span>
-                            {status && (
-                                <span className="text-emerald-400 font-bold">• {status}</span>
-                            )}
-                        </p>
+                        <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+                                <h2 className="text-xs sm:text-sm font-black tracking-tight uppercase truncate text-white">
+                                    Transworld Logistics Satellite Radar
+                                </h2>
+                                {trackingNumber && (
+                                    <span className="hidden md:inline px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] font-bold">
+                                        {trackingNumber}
+                                    </span>
+                                )}
+                            </div>
+                            <p className="text-[10px] sm:text-xs text-slate-400 font-medium truncate flex items-center gap-2">
+                                <span>{originName || "Origin"}</span>
+                                <span className="text-emerald-400 font-bold">➔</span>
+                                <span>{destinationName || "Destination"}</span>
+                                {status && (
+                                    <span className="text-emerald-400 font-bold">• {status}</span>
+                                )}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setViewMode('package')}
+                            className={`px-3 py-1.5 sm:py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md border cursor-pointer ${
+                                viewMode === 'package' 
+                                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/40' 
+                                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
+                            }`}
+                            title="Focus on package"
+                        >
+                            <Navigation size={13} className={viewMode === 'package' ? 'animate-bounce' : ''} />
+                            <span className="hidden sm:inline">Focus Package</span>
+                        </button>
+                        
+                        <button
+                            type="button"
+                            onClick={() => setViewMode('route')}
+                            className={`px-3 py-1.5 sm:py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md border cursor-pointer ${
+                                viewMode === 'route' 
+                                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/40' 
+                                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
+                            }`}
+                            title="Show entire route"
+                        >
+                            <Compass size={13} />
+                            <span className="hidden sm:inline">Full Route</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={toggleFullscreen}
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-red-950/60 hover:border-red-500/40 text-slate-200 hover:text-red-300 border border-slate-700 transition-all flex items-center gap-2 font-bold text-xs shadow-md cursor-pointer"
+                            title="Exit Fullscreen (or press Esc)"
+                        >
+                            <Minimize2 size={15} />
+                            <span className="hidden md:inline">Exit Fullscreen</span>
+                            <kbd className="hidden lg:inline px-1.5 py-0.5 text-[9px] font-mono bg-slate-900 border border-slate-700 rounded text-slate-400">ESC</kbd>
+                        </button>
+                    </div>
+                </header>
+            ) : (
+                /* INLINE VIEW TOP BAR */
+                <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-3 sm:right-3 z-[450] flex items-center justify-between gap-2 pointer-events-none">
+                    <div className="bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl text-white flex items-center gap-2 border border-white/10 shadow-lg pointer-events-auto shrink min-w-0">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">
+                            <span className="hidden sm:inline">TRANSWORLD </span>SATELLITE GPS
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setViewMode('package')}
+                            className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
+                                viewMode === 'package' 
+                                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
+                                    : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
+                            }`}
+                            title="Focus on package"
+                        >
+                            <Navigation size={13} className={viewMode === 'package' ? 'animate-bounce shrink-0' : 'shrink-0'} />
+                            <span className="hidden sm:inline">Focus Package</span>
+                            <span className="sm:hidden">Focus</span>
+                        </button>
+                        
+                        <button
+                            type="button"
+                            onClick={() => setViewMode('route')}
+                            className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
+                                viewMode === 'route' 
+                                    ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
+                                    : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
+                            }`}
+                            title="Show full route"
+                        >
+                            <Compass size={13} className="shrink-0" />
+                            <span className="hidden sm:inline">Full Route</span>
+                            <span className="sm:hidden">Route</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={toggleFullscreen}
+                            className="p-1.5 sm:p-2 rounded-xl bg-slate-900/80 text-slate-300 border border-white/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all shadow-md backdrop-blur-md cursor-pointer shrink-0"
+                            title="Toggle Fullscreen"
+                        >
+                            <Maximize2 size={15} />
+                        </button>
                     </div>
                 </div>
+            )}
 
-                {/* View Controls & Exit Button */}
-                <div className="flex items-center gap-2 shrink-0">
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('package')}
-                        className={`px-3 py-1.5 sm:py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md border cursor-pointer ${
-                            viewMode === 'package' 
-                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/40' 
-                                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
-                        }`}
-                        title="Focus on package"
-                    >
-                        <Navigation size={13} className={viewMode === 'package' ? 'animate-bounce' : ''} />
-                        <span className="hidden sm:inline">Focus Package</span>
-                    </button>
-                    
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('route')}
-                        className={`px-3 py-1.5 sm:py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md border cursor-pointer ${
-                            viewMode === 'route' 
-                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/40' 
-                                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
-                        }`}
-                        title="Show entire route"
-                    >
-                        <Compass size={13} />
-                        <span className="hidden sm:inline">Full Route</span>
-                    </button>
+            {/* FLOATING ZOOM CONTROLS */}
+            <div className={`absolute right-3 sm:right-4 ${isFullscreen ? 'bottom-28' : 'bottom-24'} z-[450] flex flex-col gap-1.5 pointer-events-auto`}>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        mapRef.current?.zoomIn();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom In"
+                    aria-label="Zoom in"
+                >
+                    <Plus size={16} />
+                </button>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        mapRef.current?.zoomOut();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom Out"
+                    aria-label="Zoom out"
+                >
+                    <Minus size={16} />
+                </button>
+            </div>
 
-                    <button
-                        type="button"
-                        onClick={toggleFullscreen}
-                        className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-red-950/60 hover:border-red-500/40 text-slate-200 hover:text-red-300 border border-slate-700 transition-all flex items-center gap-2 font-bold text-xs shadow-md cursor-pointer"
-                        title="Exit Fullscreen (or press Esc)"
-                    >
-                        <Minimize2 size={15} />
-                        <span className="hidden md:inline">Exit Fullscreen</span>
-                        <kbd className="hidden lg:inline px-1.5 py-0.5 text-[9px] font-mono bg-slate-900 border border-slate-700 rounded text-slate-400">ESC</kbd>
-                    </button>
-                </div>
-            </header>
-
-            {/* Map Viewport */}
-            <div className="flex-1 w-full h-full relative z-0">
-                {/* Floating Zoom Controls for Fullscreen */}
-                <div className="absolute right-4 sm:right-6 bottom-28 z-[450] flex flex-col gap-1.5 pointer-events-auto">
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            mapInstance?.zoomIn();
-                        }}
-                        className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-2xl cursor-pointer"
-                        title="Zoom In"
-                        aria-label="Zoom in"
-                    >
-                        <Plus size={18} />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            mapInstance?.zoomOut();
-                        }}
-                        className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-2xl cursor-pointer"
-                        title="Zoom Out"
-                        aria-label="Zoom out"
-                    >
-                        <Minus size={18} />
-                    </button>
-                </div>
-
+            {/* SINGLE MAP CONTAINER - NEVER DESTROYED OR REMOUNTED */}
+            <div className="w-full h-full relative z-0 flex-1">
                 <MapContainer
                     center={currentCoords}
                     zoom={13}
                     minZoom={2}
                     maxZoom={18}
-                    className="w-full h-full z-0"
+                    className="w-full h-full rounded-sm z-0"
                     scrollWheelZoom={true}
                     doubleClickZoom={true}
                     touchZoom={true}
                     zoomControl={false}
                 >
-                    {renderMapElements()}
-                </MapContainer>
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
 
-                {/* Floating Bottom HUD */}
+                    {/* Traversed Path: Origin -> Current Location */}
+                    <Polyline
+                        positions={[startCoords, currentCoords]}
+                        pathOptions={{ color: '#059669', weight: 6, opacity: 0.9 }}
+                    />
+
+                    {/* Remaining Path: Current Location -> Destination */}
+                    <Polyline
+                        positions={[currentCoords, destCoords]}
+                        pathOptions={{ color: '#64748B', weight: 4, dashArray: '8, 10', opacity: 0.6 }}
+                    />
+
+                    {/* Start Marker */}
+                    {originIcon && (
+                        <Marker position={startCoords} icon={originIcon}>
+                            <Popup>
+                                <div className="font-bold text-xs uppercase text-slate-900">
+                                    Origin: {originName || "Start Location"}
+                                </div>
+                            </Popup>
+                        </Marker>
+                    )}
+
+                    {/* Destination Marker */}
+                    {destinationIcon && (
+                        <Marker position={destCoords} icon={destinationIcon}>
+                            <Popup>
+                                <div className="font-bold text-xs uppercase text-slate-900">
+                                    Destination: {destinationName || "Final Destination"}
+                                </div>
+                            </Popup>
+                        </Marker>
+                    )}
+
+                    {/* Moving Package Marker */}
+                    <MovingTruckMarker 
+                        startCoords={startCoords}
+                        currentCoords={currentCoords}
+                        destCoords={destCoords}
+                        currentLocationName={currentLocationName}
+                    />
+
+                    <MapFocusController 
+                        currentCoords={currentCoords} 
+                        viewMode={viewMode} 
+                        bounds={bounds} 
+                        isFullscreen={isFullscreen} 
+                    />
+
+                    <MapBridge mapRef={mapRef} />
+                </MapContainer>
+            </div>
+
+            {/* FULLSCREEN BOTTOM HUD */}
+            {isFullscreen && (
                 <div className="absolute bottom-6 left-4 sm:left-6 right-4 sm:right-6 z-[450] pointer-events-none flex justify-between items-end gap-4">
                     <div className="bg-slate-900/90 backdrop-blur-md border border-slate-800 p-3 sm:p-4 rounded-2xl shadow-2xl pointer-events-auto max-w-md">
                         <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-0.5">
@@ -536,135 +632,7 @@ export default function LiveMap({
                         <span>GPS SATELLITE UPLINK LIVE</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    );
-
-    // If Fullscreen is active, render via Portal to document.body
-    if (isFullscreen && isMounted && typeof document !== 'undefined') {
-        return (
-            <>
-                {/* Clean placeholder in original container while fullscreen */}
-                <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-3 p-6 text-center border border-slate-800">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                        <Navigation size={24} className="transform rotate-45 animate-pulse" />
-                    </div>
-                    <div>
-                        <h4 className="font-extrabold text-sm">Map Active in Fullscreen</h4>
-                        <p className="text-xs text-slate-400 mt-1">Press ESC or click below to return</p>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={toggleFullscreen}
-                        className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
-                    >
-                        <Minimize2 size={14} />
-                        <span>Return to Normal View</span>
-                    </button>
-                </div>
-
-                {createPortal(renderFullscreenView(), document.body)}
-            </>
-        );
-    }
-
-    // Normal Inline View
-    return (
-        <div className="w-full h-full relative">
-            {/* Unified Responsive Top Control Bar */}
-            <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-3 sm:right-3 z-[450] flex items-center justify-between gap-2 pointer-events-none">
-                {/* Left Status Badge */}
-                <div className="bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl text-white flex items-center gap-2 border border-white/10 shadow-lg pointer-events-auto shrink min-w-0">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">
-                        <span className="hidden sm:inline">TRANSWORLD </span>SATELLITE GPS
-                    </span>
-                </div>
-
-                {/* Right Map Actions */}
-                <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0">
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('package')}
-                        className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
-                            viewMode === 'package' 
-                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
-                                : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
-                        }`}
-                        title="Focus on package"
-                    >
-                        <Navigation size={13} className={viewMode === 'package' ? 'animate-bounce shrink-0' : 'shrink-0'} />
-                        <span className="hidden sm:inline">Focus Package</span>
-                        <span className="sm:hidden">Focus</span>
-                    </button>
-                    
-                    <button
-                        type="button"
-                        onClick={() => setViewMode('route')}
-                        className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
-                            viewMode === 'route' 
-                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
-                                : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
-                        }`}
-                        title="Show full route"
-                    >
-                        <Compass size={13} className="shrink-0" />
-                        <span className="hidden sm:inline">Full Route</span>
-                        <span className="sm:hidden">Route</span>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={toggleFullscreen}
-                        className="p-1.5 sm:p-2 rounded-xl bg-slate-900/80 text-slate-300 border border-white/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all shadow-md backdrop-blur-md cursor-pointer shrink-0"
-                        title="Toggle Fullscreen"
-                    >
-                        <Maximize2 size={15} />
-                    </button>
-                </div>
-            </div>
-
-            {/* Map Zoom Controls (Outside MapContainer for standard React DOM and 100% Safari compatibility) */}
-            <div className="absolute right-3 sm:right-4 bottom-24 z-[450] flex flex-col gap-1.5 pointer-events-auto">
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        mapInstance?.zoomIn();
-                    }}
-                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
-                    title="Zoom In"
-                    aria-label="Zoom in"
-                >
-                    <Plus size={16} />
-                </button>
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        mapInstance?.zoomOut();
-                    }}
-                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
-                    title="Zoom Out"
-                    aria-label="Zoom out"
-                >
-                    <Minus size={16} />
-                </button>
-            </div>
-
-            <MapContainer
-                center={currentCoords}
-                zoom={13}
-                minZoom={2}
-                maxZoom={18}
-                className="w-full h-full rounded-sm z-0"
-                scrollWheelZoom={true}
-                doubleClickZoom={true}
-                touchZoom={true}
-                zoomControl={false}
-            >
-                {renderMapElements()}
-            </MapContainer>
+            )}
         </div>
     );
 }
