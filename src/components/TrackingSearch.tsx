@@ -238,7 +238,7 @@ export default function TrackingSearch() {
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-10 bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden text-slate-800"
+                        className="mt-10 bg-white rounded-3xl border border-slate-100 shadow-2xl overflow-hidden text-slate-800 print:hidden"
                     >
                         {/* Status Header Banner */}
                         <div className="bg-slate-900 p-5 sm:p-8 md:p-10 flex flex-wrap justify-between items-center gap-4 sm:gap-6 text-white">
@@ -335,11 +335,7 @@ export default function TrackingSearch() {
                                             transition={{ duration: 0.3 }}
                                             className="overflow-hidden"
                                         >
-                                            <div className="h-[320px] sm:h-[400px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
-                                                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[400] bg-slate-900/90 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-white flex items-center gap-2 sm:gap-3 max-w-[90%]">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                                                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">TRANSWORLD LOGISTICS LIVE SATELLITE GPS</span>
-                                                </div>
+                                            <div className="h-[350px] sm:h-[440px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
                                                 <LiveMap
                                                     lat={result.latitude}
                                                     lng={result.longitude}
@@ -466,6 +462,213 @@ export default function TrackingSearch() {
                             </div>
                         </div>
                     </motion.div>
+                )}
+
+                {/* OFFICIAL PRINTABLE AIR WAYBILL (Visible ONLY when printing or saving as PDF) */}
+                {result && (
+                    <div id="official-waybill-document" className="hidden print:block p-8 bg-white text-slate-900 font-sans max-w-4xl mx-auto">
+                        {/* Header with Company Logo & Official Title */}
+                        <div className="border-b-2 border-slate-900 pb-5 mb-6 flex justify-between items-start">
+                            <div>
+                                <div className="flex items-center gap-3 mb-1">
+                                    <div className="w-9 h-9 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                                        T
+                                    </div>
+                                    <div>
+                                        <h1 className="text-2xl font-black tracking-tight text-slate-950 uppercase">
+                                            TRANSWORLD LOGISTICS
+                                        </h1>
+                                        <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+                                            Global Freight & Cargo Supply Chain Network
+                                        </p>
+                                    </div>
+                                </div>
+                                <p className="text-[11px] text-slate-500 mt-2">
+                                    Portal: <span className="font-semibold text-slate-700">transworldlogistics.org</span> • Support: <span className="font-semibold text-slate-700">supportdesk@transworldlogistics.org</span>
+                                </p>
+                            </div>
+
+                            <div className="text-right">
+                                <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-wider rounded border border-emerald-300">
+                                    Official Consignment Note
+                                </span>
+                                <p className="text-xs font-mono font-bold text-slate-800 mt-1.5">
+                                    AIR WAYBILL (AWB)
+                                </p>
+                                <p className="text-[10px] text-slate-500">
+                                    Generated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Tracking Number & Status Banner */}
+                        <div className="bg-slate-50 border border-slate-300 rounded-xl p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">
+                                    WAYBILL / TRACKING IDENTIFIER
+                                </span>
+                                <span className="text-2xl font-mono font-black text-slate-950 tracking-wider">
+                                    {result.tracking_number}
+                                </span>
+                            </div>
+
+                            <div className="text-right">
+                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">
+                                    CURRENT DISPATCH STATUS
+                                </span>
+                                <span className="inline-block px-3.5 py-1 bg-emerald-700 text-white text-xs font-black uppercase tracking-wider rounded-md">
+                                    {result.current_status || 'IN TRANSIT'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Routing Summary */}
+                        <div className="grid grid-cols-2 gap-4 border border-slate-200 rounded-xl p-4 mb-6 bg-slate-50/60">
+                            <div className="border-r border-slate-200 pr-4">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">ORIGIN STATION</span>
+                                <p className="text-base font-black text-slate-900">{result.origin || 'N/A'}</p>
+                            </div>
+                            <div className="pl-2">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">FINAL DESTINATION</span>
+                                <p className="text-base font-black text-slate-900">{result.destination || 'N/A'}</p>
+                            </div>
+                        </div>
+
+                        {/* Sender & Consignee Grid */}
+                        <div className="grid grid-cols-2 gap-6 mb-6">
+                            <div className="border border-slate-200 rounded-xl p-4 bg-white">
+                                <h3 className="text-xs font-black uppercase tracking-wider text-emerald-800 border-b border-slate-200 pb-2 mb-3">
+                                    1. Shipper / Sender Details
+                                </h3>
+                                <div className="space-y-2 text-xs">
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">SENDER NAME</span>
+                                        <span className="font-bold text-slate-900">{result.sender_name || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">EMAIL / CONTACT</span>
+                                        <span className="font-medium text-slate-700">{result.sender_email || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">DISPATCH PORT</span>
+                                        <span className="font-medium text-slate-700">{result.origin || 'N/A'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="border border-slate-200 rounded-xl p-4 bg-white">
+                                <h3 className="text-xs font-black uppercase tracking-wider text-emerald-800 border-b border-slate-200 pb-2 mb-3">
+                                    2. Consignee / Recipient Details
+                                </h3>
+                                <div className="space-y-2 text-xs">
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">RECIPIENT NAME</span>
+                                        <span className="font-bold text-slate-900">{result.recipient_name || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">DELIVERY ADDRESS</span>
+                                        <span className="font-medium text-slate-700 leading-relaxed">{result.recipient_address || 'Address registered on file'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-slate-400 font-bold uppercase text-[10px] block">DESTINATION PORT</span>
+                                        <span className="font-medium text-slate-700">{result.destination || 'N/A'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cargo & Freight Specifications */}
+                        <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
+                            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 font-bold text-xs uppercase tracking-wider text-slate-800">
+                                3. Cargo & Freight Specifications
+                            </div>
+                            <table className="w-full text-xs text-left">
+                                <tbody className="divide-y divide-slate-100">
+                                    <tr>
+                                        <td className="px-4 py-2.5 font-bold text-slate-500 bg-slate-50/50 w-1/3">DESCRIPTION / CONTENTS</td>
+                                        <td className="px-4 py-2.5 font-medium text-slate-900">{result.description || 'Standard high-value express shipment parcel.'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-2.5 font-bold text-slate-500 bg-slate-50/50">GROSS WEIGHT</td>
+                                        <td className="px-4 py-2.5 font-bold text-slate-900">{result.weight} LBS</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-2.5 font-bold text-slate-500 bg-slate-50/50">SERVICE CLASS</td>
+                                        <td className="px-4 py-2.5 font-bold text-emerald-800">{result.item_type || 'EXPRESS AIR FREIGHT'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-2.5 font-bold text-slate-500 bg-slate-50/50">PAYMENT STATUS</td>
+                                        <td className="px-4 py-2.5 font-bold text-slate-900">{result.payment_status || 'PAID'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-4 py-2.5 font-bold text-slate-500 bg-slate-50/50">ESTIMATED ARRIVAL</td>
+                                        <td className="px-4 py-2.5 font-medium text-slate-900">
+                                            {result.estimated_delivery ? new Date(result.estimated_delivery).toLocaleDateString() : 'TBD'}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Transit Telemetry History (if present) */}
+                        {result.updates && result.updates.length > 0 && (
+                            <div className="border border-slate-200 rounded-xl overflow-hidden mb-6">
+                                <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 font-bold text-xs uppercase tracking-wider text-slate-800">
+                                    4. Transit Telemetry & Milestone Audit Trail
+                                </div>
+                                <table className="w-full text-xs text-left">
+                                    <thead className="bg-slate-50 text-[10px] text-slate-500 uppercase font-bold border-b border-slate-200">
+                                        <tr>
+                                            <th className="px-4 py-2">Date / Time</th>
+                                            <th className="px-4 py-2">Status</th>
+                                            <th className="px-4 py-2">Location</th>
+                                            <th className="px-4 py-2">Activity Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {result.updates.map((up: ShipmentUpdate, i: number) => (
+                                            <tr key={i}>
+                                                <td className="px-4 py-2 font-mono text-[11px] text-slate-600 whitespace-nowrap">
+                                                    {new Date(up.created_at).toLocaleString()}
+                                                </td>
+                                                <td className="px-4 py-2 font-bold text-slate-900 whitespace-nowrap">
+                                                    {up.status}
+                                                </td>
+                                                <td className="px-4 py-2 font-medium text-slate-700 whitespace-nowrap">
+                                                    {up.location}
+                                                </td>
+                                                <td className="px-4 py-2 text-slate-600">
+                                                    {up.description}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Official Seal, Authentication & Signature */}
+                        <div className="border-t-2 border-slate-900 pt-6 mt-6 flex justify-between items-end">
+                            <div className="space-y-1 max-w-md">
+                                <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
+                                    <ShieldCheck size={16} />
+                                    <span>OFFICIALLY VERIFIED DISPATCH RECORD</span>
+                                </div>
+                                <p className="text-[10px] text-slate-500 leading-tight">
+                                    This document certifies international carriage registration under Transworld Logistics Operating Conditions. Issued electronically from verified secure gateway.
+                                </p>
+                            </div>
+
+                            <div className="text-right">
+                                <div className="w-52 border-b border-slate-900 pb-1 mb-1 font-mono text-[11px] text-slate-600 italic">
+                                    Authorized Dispatch Control
+                                </div>
+                                <p className="text-[10px] uppercase font-bold text-slate-400">
+                                    Transworld Global Operations
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </AnimatePresence>
         </div>

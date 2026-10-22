@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { getCoordsFromLocationName } from '@/lib/geocoding';
-import { Maximize2, Minimize2, Navigation, MapPin, Compass, ShieldCheck, ArrowRight, Zap, RefreshCw } from 'lucide-react';
+import { Maximize2, Minimize2, Navigation, MapPin, Compass, ShieldCheck, ArrowRight, Zap, RefreshCw, Plus, Minus } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 
 // Origin Icon (Start Point)
@@ -78,7 +78,44 @@ interface LiveMapProps {
     zoom?: number;
 }
 
-// Map Controller Component for view switching and size handling
+// Map Zoom Controls Component
+function MapZoomControls() {
+    const map = useMap();
+    return (
+        <div className="leaflet-bottom leaflet-right" style={{ pointerEvents: 'auto', marginBottom: '84px', marginRight: '14px', zIndex: 400 }}>
+            <div className="leaflet-control flex flex-col gap-1.5 !border-0 !bg-transparent !m-0">
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        map.zoomIn();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom In"
+                    aria-label="Zoom in"
+                >
+                    <Plus size={16} />
+                </button>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        map.zoomOut();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom Out"
+                    aria-label="Zoom out"
+                >
+                    <Minus size={16} />
+                </button>
+            </div>
+        </div>
+    );
+}
+
+// Map Controller Component for view switching - Does NOT override manual user zooming!
 function MapFocusController({ 
     currentCoords, 
     viewMode, 
@@ -91,29 +128,48 @@ function MapFocusController({
     isFullscreen: boolean;
 }) {
     const map = useMap();
+    const isFirstRun = useRef(true);
+    const prevViewMode = useRef(viewMode);
+    const prevFullscreen = useRef(isFullscreen);
 
+    // Invalidate size on mount and on fullscreen change
     useEffect(() => {
-        const updateMap = () => {
-            map.invalidateSize();
-            if (viewMode === 'package') {
-                map.flyTo(currentCoords, isFullscreen ? 14 : 13, { duration: 0.8 });
-            } else if (viewMode === 'route' && bounds) {
-                map.fitBounds(bounds, { padding: isFullscreen ? [100, 100] : [50, 50], maxZoom: 14 });
-            }
-        };
-
-        // Fire multiple recalculations to catch CSS animation and viewport transitions
-        updateMap();
-        const t1 = setTimeout(updateMap, 100);
-        const t2 = setTimeout(updateMap, 300);
-        const t3 = setTimeout(updateMap, 600);
-
+        const t1 = setTimeout(() => map.invalidateSize(), 150);
+        const t2 = setTimeout(() => map.invalidateSize(), 400);
         return () => {
             clearTimeout(t1);
             clearTimeout(t2);
-            clearTimeout(t3);
         };
-    }, [viewMode, currentCoords, bounds, isFullscreen, map]);
+    }, [isFullscreen, map]);
+
+    // Initial positioning on mount
+    useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            if (viewMode === 'package') {
+                map.setView(currentCoords, isFullscreen ? 14 : 13);
+            } else if (bounds) {
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+            }
+        }
+    }, [map]);
+
+    // Only re-center when the user explicitly clicks "Focus Package" or "Full Route"
+    useEffect(() => {
+        if (isFirstRun.current) return;
+        const viewModeChanged = prevViewMode.current !== viewMode;
+        const fsChanged = prevFullscreen.current !== isFullscreen;
+        prevViewMode.current = viewMode;
+        prevFullscreen.current = isFullscreen;
+
+        if (viewModeChanged || fsChanged) {
+            if (viewMode === 'package') {
+                map.flyTo(currentCoords, isFullscreen ? 14 : 13, { duration: 0.8 });
+            } else if (viewMode === 'route' && bounds) {
+                map.fitBounds(bounds, { padding: isFullscreen ? [80, 80] : [40, 40], maxZoom: 14 });
+            }
+        }
+    }, [viewMode, isFullscreen, currentCoords]);
 
     return null;
 }
@@ -261,11 +317,11 @@ export default function LiveMap({
 
     if (!isMounted) return <div className="w-full h-full bg-slate-100 animate-pulse rounded-sm" />;
 
-    const bounds: L.LatLngBoundsExpression = [
+    const bounds: L.LatLngBoundsExpression = useMemo(() => [
         startCoords,
         currentCoords,
         destCoords
-    ];
+    ], [startCoords[0], startCoords[1], currentCoords[0], currentCoords[1], destCoords[0], destCoords[1]]);
 
     // Core Map Elements
     const renderMapElements = () => (
@@ -320,6 +376,8 @@ export default function LiveMap({
                 bounds={bounds} 
                 isFullscreen={isFullscreen} 
             />
+
+            <MapZoomControls />
         </>
     );
 
@@ -407,11 +465,13 @@ export default function LiveMap({
                 <MapContainer
                     center={currentCoords}
                     zoom={13}
+                    minZoom={2}
+                    maxZoom={18}
                     className="w-full h-full z-0"
                     scrollWheelZoom={true}
                     doubleClickZoom={true}
                     touchZoom={true}
-                    zoomControl={true}
+                    zoomControl={false}
                 >
                     {renderMapElements()}
                 </MapContainer>
@@ -472,54 +532,69 @@ export default function LiveMap({
     // Normal Inline View
     return (
         <div className="w-full h-full relative">
-            {/* Overlay Map View Controls */}
-            <div className="absolute top-4 right-4 z-[450] flex items-center gap-2">
-                <button
-                    type="button"
-                    onClick={() => setViewMode('package')}
-                    className={`px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg backdrop-blur-md border cursor-pointer ${
-                        viewMode === 'package' 
-                            ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
-                            : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
-                    }`}
-                    title="Zoom in on package location"
-                >
-                    <Navigation size={14} className={viewMode === 'package' ? 'animate-bounce' : ''} />
-                    <span>Focus Package</span>
-                </button>
-                
-                <button
-                    type="button"
-                    onClick={() => setViewMode('route')}
-                    className={`px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg backdrop-blur-md border cursor-pointer ${
-                        viewMode === 'route' 
-                            ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
-                            : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
-                    }`}
-                    title="Show entire route"
-                >
-                    <Compass size={14} />
-                    <span>Full Route</span>
-                </button>
+            {/* Unified Responsive Top Control Bar */}
+            <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-3 sm:right-3 z-[450] flex items-center justify-between gap-2 pointer-events-none">
+                {/* Left Status Badge */}
+                <div className="bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl text-white flex items-center gap-2 border border-white/10 shadow-lg pointer-events-auto shrink min-w-0">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">
+                        <span className="hidden sm:inline">TRANSWORLD </span>SATELLITE GPS
+                    </span>
+                </div>
 
-                <button
-                    type="button"
-                    onClick={toggleFullscreen}
-                    className="p-2.5 rounded-xl bg-slate-900/80 text-slate-300 border border-white/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all shadow-lg backdrop-blur-md cursor-pointer"
-                    title="Fullscreen Map"
-                >
-                    <Maximize2 size={16} />
-                </button>
+                {/* Right Map Actions */}
+                <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0">
+                    <button
+                        type="button"
+                        onClick={() => setViewMode('package')}
+                        className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
+                            viewMode === 'package' 
+                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
+                                : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
+                        }`}
+                        title="Focus on package"
+                    >
+                        <Navigation size={13} className={viewMode === 'package' ? 'animate-bounce shrink-0' : 'shrink-0'} />
+                        <span className="hidden sm:inline">Focus Package</span>
+                        <span className="sm:hidden">Focus</span>
+                    </button>
+                    
+                    <button
+                        type="button"
+                        onClick={() => setViewMode('route')}
+                        className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md backdrop-blur-md border cursor-pointer ${
+                            viewMode === 'route' 
+                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/30' 
+                                : 'bg-slate-900/80 text-slate-300 border-white/10 hover:bg-slate-900 hover:text-white'
+                        }`}
+                        title="Show full route"
+                    >
+                        <Compass size={13} className="shrink-0" />
+                        <span className="hidden sm:inline">Full Route</span>
+                        <span className="sm:hidden">Route</span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={toggleFullscreen}
+                        className="p-1.5 sm:p-2 rounded-xl bg-slate-900/80 text-slate-300 border border-white/10 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all shadow-md backdrop-blur-md cursor-pointer shrink-0"
+                        title="Toggle Fullscreen"
+                    >
+                        <Maximize2 size={15} />
+                    </button>
+                </div>
             </div>
 
             <MapContainer
                 center={currentCoords}
                 zoom={13}
+                minZoom={2}
+                maxZoom={18}
                 className="w-full h-full rounded-sm z-0"
                 scrollWheelZoom={true}
                 doubleClickZoom={true}
                 touchZoom={true}
-                zoomControl={true}
+                zoomControl={false}
             >
                 {renderMapElements()}
             </MapContainer>
