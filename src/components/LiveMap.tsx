@@ -78,41 +78,15 @@ interface LiveMapProps {
     zoom?: number;
 }
 
-// Map Zoom Controls Component
-function MapZoomControls() {
+// Map Instance Bridge to connect Leaflet instance to outside controls safely without DOM injection
+function MapInstanceBridge({ onMap }: { onMap: (map: L.Map) => void }) {
     const map = useMap();
-    return (
-        <div className="leaflet-bottom leaflet-right" style={{ pointerEvents: 'auto', marginBottom: '84px', marginRight: '14px', zIndex: 400 }}>
-            <div className="leaflet-control flex flex-col gap-1.5 !border-0 !bg-transparent !m-0">
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        map.zoomIn();
-                    }}
-                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
-                    title="Zoom In"
-                    aria-label="Zoom in"
-                >
-                    <Plus size={16} />
-                </button>
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        map.zoomOut();
-                    }}
-                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
-                    title="Zoom Out"
-                    aria-label="Zoom out"
-                >
-                    <Minus size={16} />
-                </button>
-            </div>
-        </div>
-    );
+    useEffect(() => {
+        if (map) {
+            onMap(map);
+        }
+    }, [map, onMap]);
+    return null;
 }
 
 // Map Controller Component for view switching - Does NOT override manual user zooming!
@@ -132,10 +106,18 @@ function MapFocusController({
     const prevViewMode = useRef(viewMode);
     const prevFullscreen = useRef(isFullscreen);
 
-    // Invalidate size on mount and on fullscreen change
+    // Invalidate size safely on mount and on fullscreen change
     useEffect(() => {
-        const t1 = setTimeout(() => map.invalidateSize(), 150);
-        const t2 = setTimeout(() => map.invalidateSize(), 400);
+        const t1 = setTimeout(() => {
+            try {
+                map.invalidateSize();
+            } catch {}
+        }, 150);
+        const t2 = setTimeout(() => {
+            try {
+                map.invalidateSize();
+            } catch {}
+        }, 400);
         return () => {
             clearTimeout(t1);
             clearTimeout(t2);
@@ -146,13 +128,16 @@ function MapFocusController({
     useEffect(() => {
         if (isFirstRun.current) {
             isFirstRun.current = false;
-            if (viewMode === 'package') {
-                map.setView(currentCoords, isFullscreen ? 14 : 13);
-            } else if (bounds) {
-                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
-            }
+            try {
+                map.invalidateSize();
+                if (viewMode === 'package') {
+                    map.setView(currentCoords, isFullscreen ? 14 : 13);
+                } else if (bounds) {
+                    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+                }
+            } catch {}
         }
-    }, [map]);
+    }, [map, currentCoords, bounds, isFullscreen, viewMode]);
 
     // Only re-center when the user explicitly clicks "Focus Package" or "Full Route"
     useEffect(() => {
@@ -163,13 +148,16 @@ function MapFocusController({
         prevFullscreen.current = isFullscreen;
 
         if (viewModeChanged || fsChanged) {
-            if (viewMode === 'package') {
-                map.flyTo(currentCoords, isFullscreen ? 14 : 13, { duration: 0.8 });
-            } else if (viewMode === 'route' && bounds) {
-                map.fitBounds(bounds, { padding: isFullscreen ? [80, 80] : [40, 40], maxZoom: 14 });
-            }
+            try {
+                map.invalidateSize();
+                if (viewMode === 'package') {
+                    map.flyTo(currentCoords, isFullscreen ? 14 : 13, { duration: 0.8 });
+                } else if (viewMode === 'route' && bounds) {
+                    map.fitBounds(bounds, { padding: isFullscreen ? [80, 80] : [40, 40], maxZoom: 14 });
+                }
+            } catch {}
         }
-    }, [viewMode, isFullscreen, currentCoords]);
+    }, [viewMode, isFullscreen, currentCoords, bounds, map]);
 
     return null;
 }
@@ -193,31 +181,35 @@ export default function LiveMap({
     const [isFullscreen, setIsFullscreen] = useState(false);
     const fullscreenRef = useRef<HTMLDivElement>(null);
 
-    // Resolve Origin Coordinates
+    const [mapInstance, setMapInstance] = useState<L.Map | null>(null);
+
+    // Resolve Origin Coordinates with NaN safety
     let startCoords: [number, number] = [32.7767, -96.7970]; // Default Dallas
-    if (originLat && originLng) {
-        startCoords = [originLat, originLng];
+    if (originLat && originLng && !isNaN(Number(originLat)) && !isNaN(Number(originLng))) {
+        startCoords = [Number(originLat), Number(originLng)];
     } else if (originName) {
         const resolved = getCoordsFromLocationName(originName);
-        if (resolved) startCoords = resolved;
+        if (resolved && !isNaN(resolved[0]) && !isNaN(resolved[1])) startCoords = resolved;
     }
 
-    // Resolve Destination Coordinates
+    // Resolve Destination Coordinates with NaN safety
     let destCoords: [number, number] = [40.7128, -74.0060]; // Default NY
-    if (destinationLat && destinationLng) {
-        destCoords = [destinationLat, destinationLng];
+    if (destinationLat && destinationLng && !isNaN(Number(destinationLat)) && !isNaN(Number(destinationLng))) {
+        destCoords = [Number(destinationLat), Number(destinationLng)];
     } else if (destinationName) {
         const resolved = getCoordsFromLocationName(destinationName);
-        if (resolved) destCoords = resolved;
+        if (resolved && !isNaN(resolved[0]) && !isNaN(resolved[1])) destCoords = resolved;
     }
 
-    // Resolve Current Package Location Coordinates
+    // Resolve Current Package Location Coordinates with NaN safety
     let currentCoords: [number, number];
-    if (lat && lng) {
-        currentCoords = [lat, lng];
+    if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
+        currentCoords = [Number(lat), Number(lng)];
     } else if (currentLocationName) {
         const resolved = getCoordsFromLocationName(currentLocationName);
-        currentCoords = resolved || [(startCoords[0] + destCoords[0]) / 2, (startCoords[1] + destCoords[1]) / 2];
+        currentCoords = (resolved && !isNaN(resolved[0]) && !isNaN(resolved[1])) 
+            ? resolved 
+            : [(startCoords[0] + destCoords[0]) / 2, (startCoords[1] + destCoords[1]) / 2];
     } else {
         currentCoords = [(startCoords[0] + destCoords[0]) / 2, (startCoords[1] + destCoords[1]) / 2];
     }
@@ -255,7 +247,7 @@ export default function LiveMap({
         }, 60);
 
         return () => clearInterval(interval);
-    }, [isMounted, startCoords, currentCoords, destCoords]);
+    }, [isMounted, startCoords[0], startCoords[1], currentCoords[0], currentCoords[1], destCoords[0], destCoords[1]]);
 
     // Handle Escape key and body scroll lock in Fullscreen
     useEffect(() => {
@@ -267,17 +259,28 @@ export default function LiveMap({
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                if (document.fullscreenElement) {
-                    document.exitFullscreen?.().catch(() => {});
+                if (typeof document !== 'undefined') {
+                    const doc = document as any;
+                    if (doc.fullscreenElement || doc.webkitFullscreenElement) {
+                        try {
+                            if (typeof doc.exitFullscreen === 'function') {
+                                doc.exitFullscreen();
+                            } else if (typeof doc.webkitExitFullscreen === 'function') {
+                                doc.webkitExitFullscreen();
+                            }
+                        } catch {}
+                    }
                 }
                 setIsFullscreen(false);
             }
         };
 
         const handleFsChange = () => {
-            if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
-                // If exited via native gesture, sync state
-                setIsFullscreen(false);
+            if (typeof document !== 'undefined') {
+                const doc = document as any;
+                if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+                    setIsFullscreen(false);
+                }
             }
         };
 
@@ -297,18 +300,26 @@ export default function LiveMap({
         if (!isFullscreen) {
             setIsFullscreen(true);
             try {
-                if (document.documentElement.requestFullscreen) {
-                    await document.documentElement.requestFullscreen();
-                } else if ((document.documentElement as any).webkitRequestFullscreen) {
-                    await (document.documentElement as any).webkitRequestFullscreen();
+                if (typeof document !== 'undefined') {
+                    const docEl = document.documentElement as any;
+                    if (docEl && typeof docEl.requestFullscreen === 'function') {
+                        await docEl.requestFullscreen();
+                    } else if (docEl && typeof docEl.webkitRequestFullscreen === 'function') {
+                        await docEl.webkitRequestFullscreen();
+                    }
                 }
-            } catch {
-                // Fallback to high-z-index portal full-screen
-            }
+            } catch {}
         } else {
-            if (document.fullscreenElement) {
+            if (typeof document !== 'undefined') {
                 try {
-                    await document.exitFullscreen?.();
+                    const doc = document as any;
+                    if (doc.fullscreenElement || doc.webkitFullscreenElement) {
+                        if (typeof doc.exitFullscreen === 'function') {
+                            await doc.exitFullscreen();
+                        } else if (typeof doc.webkitExitFullscreen === 'function') {
+                            await doc.webkitExitFullscreen();
+                        }
+                    }
                 } catch {}
             }
             setIsFullscreen(false);
@@ -377,7 +388,7 @@ export default function LiveMap({
                 isFullscreen={isFullscreen} 
             />
 
-            <MapZoomControls />
+            <MapInstanceBridge onMap={setMapInstance} />
         </>
     );
 
@@ -462,6 +473,34 @@ export default function LiveMap({
 
             {/* Map Viewport */}
             <div className="flex-1 w-full h-full relative z-0">
+                {/* Floating Zoom Controls for Fullscreen */}
+                <div className="absolute right-4 sm:right-6 bottom-28 z-[450] flex flex-col gap-1.5 pointer-events-auto">
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            mapInstance?.zoomIn();
+                        }}
+                        className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-2xl cursor-pointer"
+                        title="Zoom In"
+                        aria-label="Zoom in"
+                    >
+                        <Plus size={18} />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            mapInstance?.zoomOut();
+                        }}
+                        className="w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-2xl cursor-pointer"
+                        title="Zoom Out"
+                        aria-label="Zoom out"
+                    >
+                        <Minus size={18} />
+                    </button>
+                </div>
+
                 <MapContainer
                     center={currentCoords}
                     zoom={13}
@@ -583,6 +622,34 @@ export default function LiveMap({
                         <Maximize2 size={15} />
                     </button>
                 </div>
+            </div>
+
+            {/* Map Zoom Controls (Outside MapContainer for standard React DOM and 100% Safari compatibility) */}
+            <div className="absolute right-3 sm:right-4 bottom-24 z-[450] flex flex-col gap-1.5 pointer-events-auto">
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        mapInstance?.zoomIn();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom In"
+                    aria-label="Zoom in"
+                >
+                    <Plus size={16} />
+                </button>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        mapInstance?.zoomOut();
+                    }}
+                    className="w-8 h-8 sm:w-9 sm:h-9 bg-slate-900/90 hover:bg-emerald-600 text-white rounded-xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all shadow-xl cursor-pointer"
+                    title="Zoom Out"
+                    aria-label="Zoom out"
+                >
+                    <Minus size={16} />
+                </button>
             </div>
 
             <MapContainer

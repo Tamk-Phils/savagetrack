@@ -1,13 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import React, { Component, ReactNode, useState } from "react";
 import { Package, MapPin, AlertCircle, User, FileText, Mail, Copy, Check, ChevronRight, Zap, Download, Sparkles, Clock, Truck, ShieldCheck, Headphones, Bell, Globe, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Shipment, ShipmentUpdate } from "@/types";
 import dynamic from "next/dynamic";
 
-const LiveMap = dynamic(() => import("@/components/LiveMap"), { ssr: false });
+class MapErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+    constructor(props: { children: ReactNode }) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+    componentDidCatch(error: any) {
+        console.error("Map rendering error caught:", error);
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-2 p-6 text-center">
+                    <p className="text-sm font-bold text-emerald-400">Satellite Map Telemetry Active</p>
+                    <p className="text-xs text-slate-400">Unable to load interactive map tiles in this browser mode.</p>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
+const LiveMap = dynamic(() => import("@/components/LiveMap"), { 
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full bg-slate-900 rounded-2xl flex flex-col items-center justify-center text-white gap-3 p-6 text-center">
+            <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs text-slate-400 font-mono">INITIALIZING SATELLITE RADAR...</p>
+        </div>
+    )
+});
 
 export default function TrackingSearch() {
     const [trackingNumber, setTrackingNumber] = useState("");
@@ -336,19 +368,21 @@ export default function TrackingSearch() {
                                             className="overflow-hidden"
                                         >
                                             <div className="h-[350px] sm:h-[440px] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md relative">
-                                                <LiveMap
-                                                    lat={result.latitude}
-                                                    lng={result.longitude}
-                                                    originLat={result.origin_lat}
-                                                    originLng={result.origin_lng}
-                                                    originName={result.origin}
-                                                    destinationLat={result.destination_lat}
-                                                    destinationLng={result.destination_lng}
-                                                    destinationName={result.destination}
-                                                    currentLocationName={result.updates?.[0]?.location || result.origin}
-                                                    trackingNumber={result.tracking_number}
-                                                    status={result.current_status}
-                                                />
+                                                <MapErrorBoundary>
+                                                    <LiveMap
+                                                        lat={result.latitude}
+                                                        lng={result.longitude}
+                                                        originLat={result.origin_lat}
+                                                        originLng={result.origin_lng}
+                                                        originName={result.origin}
+                                                        destinationLat={result.destination_lat}
+                                                        destinationLng={result.destination_lng}
+                                                        destinationName={result.destination}
+                                                        currentLocationName={result.updates?.[0]?.location || result.origin}
+                                                        trackingNumber={result.tracking_number}
+                                                        status={result.current_status}
+                                                    />
+                                                </MapErrorBoundary>
                                             </div>
                                         </motion.div>
                                     )}
