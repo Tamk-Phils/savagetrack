@@ -12,7 +12,7 @@ const nodemailer = require('nodemailer');
 dotenv.config({ path: path.join(__dirname, '../.env.local') });
 
 console.log("==================================================");
-console.log("📧 TRANSGLOLOGISTICS - LIVE SMTP ICLOUD TEST");
+console.log("📧 TRANSWORLD LOGISTICS - LIVE SMTP ICLOUD TEST");
 console.log("==================================================\n");
 
 const targetEmail = process.argv[2] || "tchophilding@icloud.com";
@@ -23,7 +23,7 @@ async function createTransporter(port, secure) {
         port: port,
         secure: secure,
         auth: {
-            user: process.env.SMTP_USER || 'support@transglologistics.com',
+            user: process.env.SMTP_USER || 'supportdesk@transworldlogististics.org',
             pass: process.env.SMTP_PASS || 'Marc1234?',
         },
         connectionTimeout: 10000,
@@ -69,25 +69,25 @@ async function runSmtpTest() {
     const trackingNumber = `SWL${Math.floor(100000000 + Math.random() * 900000000)}`;
 
     const mailOptions = {
-        from: `"${process.env.FROM_NAME || 'Transglologistics'}" <${process.env.FROM_EMAIL || process.env.SMTP_USER || 'support@transglologistics.com'}>`,
+        from: `"${process.env.FROM_NAME || 'Transworld Logistics'}" <${process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogististics.org'}>`,
         to: targetEmail,
-        replyTo: process.env.FROM_EMAIL || process.env.SMTP_USER || 'support@transglologistics.com',
-        subject: `Transglologistics: Delivery Notification ${trackingNumber}`,
+        replyTo: process.env.FROM_EMAIL || process.env.SMTP_USER || 'supportdesk@transworldlogististics.org',
+        subject: `Transworld Logistics: Delivery Notification ${trackingNumber}`,
         headers: {
-            'X-Mailer': 'Transglologistics-Shipping/1.0',
+            'X-Mailer': 'Transworld Logistics-Shipping/1.0',
             'Auto-Submitted': 'auto-generated',
-            'List-Unsubscribe': `<mailto:support@transglologistics.com?subject=unsubscribe>`
+            'List-Unsubscribe': `<mailto:supportdesk@transworldlogististics.org?subject=unsubscribe>`
         },
         html: `
             <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
                 <div style="background-color: #050508; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                    <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">TRANSGLOLOGISTICS</h1>
+                    <h1 style="color: #0070F3; margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">TRANSWORLD LOGISTICS</h1>
                     <p style="color: #ffffff; margin: 5px 0 0; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7;">Live System Test & Dispatch Verification</p>
                 </div>
                 <div style="padding: 40px; background-color: #ffffff;">
                     <h2 style="color: #0f172a; font-size: 20px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">Automated Delivery Verification</h2>
                     <p style="color: #475569; font-size: 14px; line-height: 1.6; font-weight: 500;">
-                        Hello, this is an automated delivery test dispatched from the <strong>Transglologistics Logistics Platform</strong> to verify live SMTP delivery to your inbox.
+                        Hello, this is an automated delivery test dispatched from the <strong>Transworld Logistics Platform</strong> to verify live SMTP delivery to your inbox.
                     </p>
                     
                     <div style="background-color: #f8fafc; padding: 25px; border-radius: 8px; margin: 25px 0; border: 1px solid #e2e8f0;">
@@ -121,11 +121,11 @@ async function runSmtpTest() {
                     </table>
 
                     <div style="text-align: center; margin-top: 30px;">
-                        <a href="https://transglologistics.com/tracking" style="background-color: #0070F3; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; display: inline-block;">Access Tracking Portal</a>
+                        <a href="https://transworldlogististics.org/tracking" style="background-color: #0070F3; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; display: inline-block;">Access Tracking Portal</a>
                     </div>
                 </div>
                 <div style="text-align: center; padding: 20px; border-top: 1px solid #f1f5f9; color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase;">
-                    <p>© 2026 Transglologistics Logistics. Operational Integrity Verified.</p>
+                    <p>© 2026 Transworld Logistics. Operational Integrity Verified.</p>
                 </div>
             </div>
         `

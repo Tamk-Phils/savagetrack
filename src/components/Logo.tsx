@@ -59,9 +59,9 @@ export default function Logo({ className = "w-10 h-10" }: { className?: string }
                 <rect x="38" y="32" width="24" height="18" rx="2"
                     fill="url(#logoGradient2)" opacity="0.8" />
 
-                {/* VF letter mark */}
+                {/* TL letter mark */}
                 <text x="50" y="46" textAnchor="middle" fontSize="10" fontWeight="bold"
-                    fill="white" fontFamily="Arial, sans-serif">VF</text>
+                    fill="white" fontFamily="Arial, sans-serif">TL</text>
                 
                 {/* Pulsing center dot */}
                 <motion.circle 

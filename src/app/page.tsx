@@ -116,7 +116,7 @@ export default function Home() {
         >
           <img
             src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2000"
-            alt="Vanguard Freight Global Cargo Shipping"
+            alt="Transworld Logistics Global Cargo Shipping"
             className="w-full h-full object-cover opacity-85"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/50 to-emerald-950/40" />
@@ -300,7 +300,7 @@ export default function Home() {
               Dive into Our Comprehensive Service Offerings
             </h2>
             <p className="text-slate-500 text-base leading-relaxed font-medium">
-              At Vanguard Freight & Cargo, we are more than just a shipping and logistics company – we are your trusted partner in navigating the complexities of global trade and commerce. With a rich history and a forward-thinking approach.
+              At Transworld Logistics, we are more than just a shipping and logistics company – we are your trusted partner in navigating the complexities of global trade and commerce. With a rich history and a forward-thinking approach.
             </p>
           </motion.div>
 
@@ -417,7 +417,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium">
-              At Vanguard Freight & Cargo, our mission is simple yet profound: to provide unparalleled shipping and logistics services that exceed our customers’ expectations at every turn. Through a relentless pursuit of excellence, innovation, and customer satisfaction, we aim to empower businesses of all sizes to thrive in today’s dynamic marketplace.
+              At Transworld Logistics, our mission is simple yet profound: to provide unparalleled shipping and logistics services that exceed our customers’ expectations at every turn. Through a relentless pursuit of excellence, innovation, and customer satisfaction, we aim to empower businesses of all sizes to thrive in today’s dynamic marketplace.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
               <div className="flex items-start gap-4">
@@ -445,7 +445,7 @@ export default function Home() {
             <div className="relative h-[450px] rounded-[2rem] overflow-hidden border border-slate-700 shadow-2xl group">
               <img
                 src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?q=80&w=1200"
-                alt="Vanguard Freight & Cargo Excellence"
+                alt="Transworld Logistics Excellence"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent" />
@@ -500,7 +500,7 @@ export default function Home() {
             <div className="space-y-4 max-w-2xl">
               <span className="text-xs font-black uppercase tracking-widest text-emerald-700">NEWS & INSIGHTS</span>
               <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
-                Latest from Vanguard Freight
+                Latest from Transworld Logistics
               </h2>
             </div>
             <Link href="/about" className="inline-flex items-center gap-2 text-slate-900 bg-white border border-slate-200 hover:border-emerald-700 hover:text-emerald-700 font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-sm transition-all shrink-0">
@@ -602,7 +602,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                quote: "Vanguard Freight transformed our cross-border supply chain. Their real-time satellite tracking eliminated our port clearance delays.",
+                quote: "Transworld Logistics transformed our cross-border supply chain. Their real-time satellite tracking eliminated our port clearance delays.",
                 name: "Marcus Vance",
                 role: "Global Supply VP",
                 company: "Apex Logistics"
@@ -614,7 +614,7 @@ export default function Home() {
                 company: "TechExpress"
               },
               {
-                quote: "Contract warehousing and fulfillment with Vanguard Freight reduced our storage overhead by 30% while improving last-mile delivery times.",
+                quote: "Contract warehousing and fulfillment with Transworld Logistics reduced our storage overhead by 30% while improving last-mile delivery times.",
                 name: "David Chen",
                 role: "Logistics Manager",
                 company: "Oceanica Freight"
@@ -655,12 +655,12 @@ export default function Home() {
 
           <motion.div {...revealProps} className="bg-white p-8 md:p-12 rounded-[2rem] border border-slate-100 shadow-xl">
             <FAQItem
-              question="How do I track my shipment with Vanguard Freight & Cargo?"
+              question="How do I track my shipment with Transworld Logistics?"
               answer="Simply enter your Consignment No. (e.g. 12345 or VTX948210394) into the search box at the top of this page and click 'Track Now' to see live status updates and satellite coordinates."
             />
             <FAQItem
-              question="What shipping & freight services does Vanguard Freight offer?"
-              answer="Vanguard Freight & Cargo offers end-to-end transportation services including Air Freight, Ocean Freight, Road Express, Rail Transit, Warehouse Storage, Packaging, and Cargo Insurance."
+              question="What shipping & freight services does Transworld Logistics offer?"
+              answer="Transworld Logistics offers end-to-end transportation services including Air Freight, Ocean Freight, Road Express, Rail Transit, Warehouse Storage, Packaging, and Cargo Insurance."
             />
             <FAQItem
               question="How often is consignment tracking updated?"

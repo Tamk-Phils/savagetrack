@@ -1,5 +1,5 @@
 /**
- * System Verification & Diagnostic Script for Transglologistics Platform
+ * System Verification & Diagnostic Script for Transworld Logistics Platform
  * Run with: node scripts/test_system.js
  */
 
@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 console.log("==================================================");
-console.log("🧪 TRANSGLOLOGISTICS PLATFORM - SYSTEM INTEGRITY TEST");
+console.log("🧪 TRANSWORLD LOGISTICS PLATFORM - SYSTEM INTEGRITY TEST");
 console.log("==================================================\n");
 
 let passed = 0;

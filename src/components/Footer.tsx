@@ -28,7 +28,7 @@ export default function Footer() {
                         <span className="text-emerald-200 text-xs font-black uppercase tracking-widest">STAY CONNECTED</span>
                         <h3 className="text-2xl md:text-4xl font-black tracking-tight">Subscribe Our Newsletter</h3>
                         <p className="text-emerald-100 text-sm font-medium leading-relaxed">
-                            Don’t miss out on exciting updates, exclusive freight rates, and global logistics insights from Vanguard Freight & Cargo!
+                            Don’t miss out on exciting updates, exclusive freight rates, and global logistics insights from Transworld Logistics!
                         </p>
                     </div>
 
@@ -65,7 +65,7 @@ export default function Footer() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-2xl font-black tracking-tight text-white font-display">
-                                    Vanguard Freight <span className="text-emerald-400">Logistics</span>
+                                    Transworld <span className="text-emerald-400">Logistics</span>
                                 </span>
                                 <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest -mt-1">
                                     Locate Your Parcel Anywhere Anytime
@@ -80,7 +80,7 @@ export default function Footer() {
                         <div className="space-y-2.5 text-xs text-slate-300 font-medium pt-1">
                             <div className="flex items-center gap-3 text-slate-400">
                                 <Mail size={14} className="text-emerald-400 shrink-0" />
-                                <span>support@vanguardfreight.com</span>
+                                <span>supportdesk@transworldlogististics.org</span>
                             </div>
                             <div className="flex items-center gap-3 text-slate-400">
                                 <Phone size={14} className="text-emerald-400 shrink-0" />
@@ -163,7 +163,7 @@ export default function Footer() {
                 {/* Copyright & Sub-links */}
                 <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left text-xs font-medium text-slate-400">
                     <p>
-                        © 2026 Vanguard Freight & Cargo. All rights reserved. Locate Your Parcel Anywhere Anytime.
+                        © 2026 Transworld Logistics. All rights reserved. Locate Your Parcel Anywhere Anytime.
                     </p>
                     <div className="flex gap-6">
                         <Link href="/privacy" className="hover:text-emerald-400 transition-colors">Privacy</Link>

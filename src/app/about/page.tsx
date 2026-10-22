@@ -12,7 +12,7 @@ export default function AboutPage() {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2000"
-                        alt="Vanguard Freight Global Freight Operations"
+                        alt="Transworld Logistics Global Freight Operations"
                         fill
                         priority
                         className="object-cover object-center opacity-25"
@@ -24,14 +24,14 @@ export default function AboutPage() {
                     <div className="max-w-3xl space-y-6">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-md">
                             <Zap size={14} className="fill-white" />
-                            ABOUT VANGUARD FREIGHT & CARGO
+                            ABOUT TRANSWORLD LOGISTICS
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-[1.1]">
                             Locate Your Parcel <br />
                             <span className="text-emerald-400">Anywhere Anytime.</span>
                         </h1>
                         <p className="text-slate-200 text-base md:text-xl font-medium leading-relaxed">
-                            At Vanguard Freight & Cargo, we are more than just a shipping and logistics company – we are your trusted partner in navigating the complexities of global trade and commerce.
+                            At Transworld Logistics, we are more than just a shipping and logistics company – we are your trusted partner in navigating the complexities of global trade and commerce.
                         </p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ export default function AboutPage() {
                     <div className="relative h-[480px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
                         <Image 
                             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2000" 
-                            alt="Vanguard Freight Parcel Express Team" 
+                            alt="Transworld Logistics Parcel Express Team" 
                             fill 
                             className="object-cover"
                         />
@@ -102,7 +102,7 @@ export default function AboutPage() {
                 <div className="bg-emerald-700 text-white p-12 md:p-16 rounded-3xl shadow-2xl space-y-6 max-w-4xl mx-auto">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tight">Ready to Dispatch or Track Your Freight?</h2>
                     <p className="text-emerald-100 text-base max-w-2xl mx-auto font-medium">
-                        Experience fast, reliable and secure package tracking across global logistics hubs with Vanguard Freight & Cargo.
+                        Experience fast, reliable and secure package tracking across global logistics hubs with Transworld Logistics.
                     </p>
                     <div className="pt-4 flex flex-wrap justify-center gap-4">
                         <Link href="/tracking" className="bg-white text-emerald-700 font-extrabold text-sm px-8 py-4 rounded-xl shadow-lg hover:bg-slate-100 transition-all">

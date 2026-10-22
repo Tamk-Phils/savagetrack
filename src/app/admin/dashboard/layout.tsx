@@ -31,7 +31,7 @@ const SidebarContent = ({
                     <Radar size={20} className="animate-pulse" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-sm font-black tracking-tighter text-slate-900 uppercase">Vanguard Freight Admin</span>
+                    <span className="text-sm font-black tracking-tighter text-slate-900 uppercase">Transworld Logistics Admin</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Management Portal</span>
                 </div>
             </div>

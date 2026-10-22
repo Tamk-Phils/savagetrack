@@ -25,7 +25,7 @@ export default function DashboardOverview() {
         if (typeof window === "undefined") return;
 
         const timer = setTimeout(() => {
-            const saved = localStorage.getItem("vanguardfreight_shipments") || localStorage.getItem("vanguardfreight_shipments");
+            const saved = localStorage.getItem("transworldlogistics_shipments") || localStorage.getItem("transworldlogistics_shipments");
             const shipments: Shipment[] = saved ? JSON.parse(saved) : [];
 
             const total = shipments.length;

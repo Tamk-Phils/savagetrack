@@ -15,34 +15,34 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Vanguard Freight | Global Freight & Package Tracking",
-    template: "%s | Vanguard Freight"
+    default: "Transworld Logistics | Global Freight & Package Tracking",
+    template: "%s | Transworld Logistics"
   },
-  description: "Global logistics, express air transit, ocean freight, and real-time package tracking. Fast, secure delivery with Vanguard Freight.",
-  keywords: ["package tracking", "vanguardfreight shipping", "vanguardfreight", "shipping company", "express delivery", "global freight", "cargo tracking"],
-  authors: [{ name: "Vanguard Freight Team" }],
-  creator: "Vanguard Freight",
-  publisher: "Vanguard Freight & Cargo",
+  description: "Global logistics, express air transit, ocean freight, and real-time package tracking. Fast, secure delivery with Transworld Logistics.",
+  keywords: ["package tracking", "transworldlogistics shipping", "transworldlogistics", "shipping company", "express delivery", "global freight", "cargo tracking"],
+  authors: [{ name: "Transworld Logistics Team" }],
+  creator: "Transworld Logistics",
+  publisher: "Transworld Logistics",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://vanguardfreight.com"),
+  metadataBase: new URL("https://transworldlogististics.org"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Vanguard Freight | Global Freight & Package Tracking",
-    description: "Global logistics, express air transit, ocean freight, and real-time package tracking. Fast, secure delivery with Vanguard Freight.",
-    url: "https://vanguardfreight.com",
-    siteName: "Vanguard Freight & Cargo",
+    title: "Transworld Logistics | Global Freight & Package Tracking",
+    description: "Global logistics, express air transit, ocean freight, and real-time package tracking. Fast, secure delivery with Transworld Logistics.",
+    url: "https://transworldlogististics.org",
+    siteName: "Transworld Logistics",
     images: [
       {
         url: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1200",
         width: 1200,
         height: 630,
-        alt: "Vanguard Freight & Cargo",
+        alt: "Transworld Logistics",
       },
     ],
     locale: "en_US",
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vanguard Freight | Global Freight & Package Tracking",
-    description: "Global logistics, express air transit, ocean freight, and real-time package tracking with Vanguard Freight.",
+    title: "Transworld Logistics | Global Freight & Package Tracking",
+    description: "Global logistics, express air transit, ocean freight, and real-time package tracking with Transworld Logistics.",
     images: ["https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1200"],
   },
   robots: {
@@ -75,13 +75,13 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LogisticsService",
-  "name": "Vanguard Freight & Cargo",
-  "url": "https://vanguardfreight.com",
-  "logo": "https://vanguardfreight.com/favicon.ico",
+  "name": "Transworld Logistics",
+  "url": "https://transworldlogististics.org",
+  "logo": "https://transworldlogististics.org/favicon.ico",
   "description": "Global freight forwarding, air transit, and real-time package tracking portal.",
-  "email": "support@vanguardfreight.com",
+  "email": "supportdesk@transworldlogististics.org",
   "sameAs": [
-    "https://vanguardfreight.com"
+    "https://transworldlogististics.org"
   ],
   "areaServed": "Worldwide"
 };

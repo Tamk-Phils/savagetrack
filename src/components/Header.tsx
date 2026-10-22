@@ -72,9 +72,9 @@ export default function Header() {
             <div className="bg-slate-900 text-slate-300 text-xs py-2 px-6 border-b border-slate-800 hidden md:block">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-6">
-                        <a href="mailto:support@vanguardfreight.com" className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
+                        <a href="mailto:supportdesk@transworldlogististics.org" className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
                             <Mail size={14} className="text-emerald-400" />
-                            <span>support@vanguardfreight.com</span>
+                            <span>supportdesk@transworldlogististics.org</span>
                         </a>
                         <div className="flex items-center gap-2">
                             <Phone size={14} className="text-emerald-400" />
@@ -101,7 +101,7 @@ export default function Header() {
                         <Navigation size={20} className="transform rotate-45 sm:w-[22px] sm:h-[22px]" />
                     </div>
                     <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-display">
-                        Vanguard Freight <span className="text-emerald-700">Logistics</span>
+                        Transworld <span className="text-emerald-700">Logistics</span>
                     </span>
                 </Link>
 

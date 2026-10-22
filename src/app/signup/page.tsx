@@ -62,14 +62,14 @@ export default function SignupPage() {
                         <h2 className="text-2xl font-black uppercase tracking-tighter leading-[0.9]">SYSTEM <br/><span className="text-primary">ENROLLMENT</span></h2>
                     </div>
                     <div className="relative z-10 pt-10 border-t border-white/10">
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">VANGUARD FREIGHT</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">TRANSWORLD LOGISTICS</p>
                     </div>
                 </div>
 
                 <div className="md:w-2/3 p-10 sm:p-16">
                     <div className="mb-12">
                         <h1 className="text-3xl font-black text-slate-900 mb-3 uppercase tracking-tighter">NETWORK IDENTITY</h1>
-                        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed">Establish your secure office within the Vanguard Freight autonomous logistics network.</p>
+                        <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest leading-relaxed">Establish your secure office within the Transworld Logistics autonomous logistics network.</p>
                     </div>
 
                     {error && (
@@ -112,7 +112,7 @@ export default function SignupPage() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-sm py-5 px-6 pl-14 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-bold text-slate-900 text-sm outline-none"
-                                        placeholder="user@vanguardfreight.com"
+                                        placeholder="user@transworldlogististics.org"
                                     />
                                     <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                                 </div>

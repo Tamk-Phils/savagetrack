@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 import { sendShipmentCreatedEmail, sendShipmentUpdateEmail } from '../../src/lib/email';
 
 async function runEmailTests() {
-    console.log("--- TRANSGLOLOGISTICS EMAIL TEST PROTOCOL ---");
+    console.log("--- TRANSWORLD LOGISTICS EMAIL TEST PROTOCOL ---");
     
     const testRecipient = process.env.SMTP_USER || "test@example.com";
     const trackingNumber = "VTX-TEST-999-LOG";
@@ -18,7 +18,7 @@ async function runEmailTests() {
     console.log("\n[TEST 1] Dispatching 'Shipment Created' Telemetry...");
     const result1 = await sendShipmentCreatedEmail({
         to: testRecipient,
-        subject: "Transglologistics: Transit Protocol Initiated",
+        subject: "Transworld Logistics: Transit Protocol Initiated",
         trackingNumber: trackingNumber,
         senderName: "COMMAND_CORE",
         recipientName: "TEST_OPERATOR",
@@ -36,7 +36,7 @@ async function runEmailTests() {
     console.log("\n[TEST 2] Dispatching 'Shipment Update' Telemetry...");
     const result2 = await sendShipmentUpdateEmail({
         to: testRecipient,
-        subject: "Transglologistics: Telemetry Variance Reported",
+        subject: "Transworld Logistics: Telemetry Variance Reported",
         trackingNumber: trackingNumber,
         recipientName: "TEST_OPERATOR",
         newStatus: "IN_TRANSIT",

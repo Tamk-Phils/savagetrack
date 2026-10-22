@@ -4,21 +4,21 @@ const path = require('path');
 const directoryPath = path.join(__dirname, '..');
 
 const replacements = [
-    { regex: /SwiftLink Shipping/g, replacement: 'Transglologistics' },
-    { regex: /SWIFTLINK SHIPPING/g, replacement: 'TRANSGLOLOGISTICS' },
-    { regex: /SwiftLink/g, replacement: 'Transglologistics' },
-    { regex: /SWIFTLINK/g, replacement: 'TRANSGLOLOGISTICS' },
-    { regex: /swiftlinkshipping\.com/g, replacement: 'transglologistics.com' },
-    { regex: /swiftlink/g, replacement: 'transglologistics' },
-    { regex: /Vortex Shipping/g, replacement: 'Transglologistics' },
-    { regex: /VORTEX SHIPPING/g, replacement: 'TRANSGLOLOGISTICS' },
-    { regex: /Vortex Global/g, replacement: 'Transglologistics' },
-    { regex: /VORTEX GLOBAL/g, replacement: 'TRANSGLOLOGISTICS' },
-    { regex: /Vortex Air Cargo/g, replacement: 'Transglologistics Air Cargo' },
-    { regex: /Vortex Freight Trucking/g, replacement: 'Transglologistics Freight Trucking' },
-    { regex: /Vortex/g, replacement: 'Transglologistics' },
-    { regex: /VORTEX/g, replacement: 'TRANSGLOLOGISTICS' },
-    { regex: /vortex/g, replacement: 'transglologistics' }
+    { regex: /SwiftLink Shipping/g, replacement: 'Transworld Logistics' },
+    { regex: /SWIFTLINK SHIPPING/g, replacement: 'TRANSWORLD LOGISTICS' },
+    { regex: /SwiftLink/g, replacement: 'Transworld Logistics' },
+    { regex: /SWIFTLINK/g, replacement: 'TRANSWORLD LOGISTICS' },
+    { regex: /swiftlinkshipping\.com/g, replacement: 'transworldlogististics.org' },
+    { regex: /swiftlink/g, replacement: 'transworldlogistics' },
+    { regex: /Vortex Shipping/g, replacement: 'Transworld Logistics' },
+    { regex: /VORTEX SHIPPING/g, replacement: 'TRANSWORLD LOGISTICS' },
+    { regex: /Vortex Global/g, replacement: 'Transworld Logistics' },
+    { regex: /VORTEX GLOBAL/g, replacement: 'TRANSWORLD LOGISTICS' },
+    { regex: /Vortex Air Cargo/g, replacement: 'Transworld Logistics Air Cargo' },
+    { regex: /Vortex Freight Trucking/g, replacement: 'Transworld Logistics Freight Trucking' },
+    { regex: /Vortex/g, replacement: 'Transworld Logistics' },
+    { regex: /VORTEX/g, replacement: 'TRANSWORLD LOGISTICS' },
+    { regex: /vortex/g, replacement: 'transworldlogistics' }
 ];
 
 // Files and directories to ignore

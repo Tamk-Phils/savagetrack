@@ -1,5 +1,5 @@
 -- ==========================================================
--- VANGUARD FREIGHT & CARGO PLATFORM - UNIFIED PRODUCTION SQL SETUP SCRIPT
+-- TRANSWORLD LOGISTICS PLATFORM - UNIFIED PRODUCTION SQL SETUP SCRIPT
 -- ==========================================================
 -- Run this SINGLE script in your Supabase SQL Editor to configure all
 -- tables, columns, indexes, Row-Level Security (RLS) policies, and seed data.
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS shipments (
     weight DECIMAL(10, 2) DEFAULT 0.00,
     dimensions VARCHAR(100) DEFAULT '12x12x12',
     service_level VARCHAR(100) DEFAULT 'Priority Air Express',
-    carrier VARCHAR(100) DEFAULT 'Vanguard Freight Air Cargo',
+    carrier VARCHAR(100) DEFAULT 'Transworld Logistics Air Cargo',
     declared_value DECIMAL(10, 2) DEFAULT 0.00,
     quantity INTEGER DEFAULT 1,
     special_notes TEXT,
@@ -53,7 +53,7 @@ BEGIN
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS sender_address TEXT;
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS recipient_phone VARCHAR(50);
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS service_level VARCHAR(100) DEFAULT 'Priority Air Express';
-    ALTER TABLE shipments ADD COLUMN IF NOT EXISTS carrier VARCHAR(100) DEFAULT 'Vanguard Freight Air Cargo';
+    ALTER TABLE shipments ADD COLUMN IF NOT EXISTS carrier VARCHAR(100) DEFAULT 'Transworld Logistics Air Cargo';
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS declared_value DECIMAL(10, 2) DEFAULT 0.00;
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS quantity INTEGER DEFAULT 1;
     ALTER TABLE shipments ADD COLUMN IF NOT EXISTS special_notes TEXT;
@@ -166,7 +166,7 @@ INSERT INTO shipments (
     'Consumer Electronics',
     'Express delivery of high-value optical components and server boards',
     'SwiftLogistics US Hub',
-    'support@vanguardfreight.com',
+    'supportdesk@transworldlogististics.org',
     '+1 (555) 019-2834',
     'Sarah Jenkins',
     'sarah.j@example.com',
@@ -179,7 +179,7 @@ INSERT INTO shipments (
     14.50,
     '16x12x8',
     'Priority Air Express',
-    'Vanguard Freight Air Cargo',
+    'Transworld Logistics Air Cargo',
     450.00,
     2,
     'In Delivery',
@@ -191,8 +191,8 @@ INSERT INTO shipments (
     'VTX104928172',
     'Commercial Goods',
     'Bulk manufacturing parts for industrial production equipment',
-    'Vanguard Freight Hub',
-    'support@vanguardfreight.com',
+    'Transworld Logistics Hub',
+    'supportdesk@transworldlogististics.org',
     '+1 (555) 392-1029',
     'Robert Chen',
     'r.chen@globalport.io',
@@ -205,7 +205,7 @@ INSERT INTO shipments (
     42.00,
     '24x20x18',
     'Standard Ground',
-    'Vanguard Freight Trucking',
+    'Transworld Logistics Trucking',
     1200.00,
     5,
     'Out for Delivery',
@@ -215,7 +215,7 @@ INSERT INTO shipments (
 ) ON CONFLICT (tracking_number) DO NOTHING;
 
 INSERT INTO admin_users (full_name, email, role, status) VALUES
-('COMMAND ADMIN', 'ADMIN@VANGUARD FREIGHT-SHIPPING.COM', 'SUPER USER', 'ACTIVE'),
+('COMMAND ADMIN', 'ADMIN@TRANSWORLD LOGISTICS-SHIPPING.COM', 'SUPER USER', 'ACTIVE'),
 ('SARAH JENKINS', 'S.JENKINS@SWIFT.IO', 'OPERATOR', 'ACTIVE'),
 ('ROBERT CHEN', 'R.CHEN@GLOBALPORT.IO', 'MANAGER', 'OFFLINE')
 ON CONFLICT (email) DO NOTHING;

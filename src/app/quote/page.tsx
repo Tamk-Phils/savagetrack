@@ -60,7 +60,7 @@ export default function QuotePage() {
                     {/* Left Info Column */}
                     <div className="lg:col-span-5 space-y-8">
                         <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md space-y-6">
-                            <h3 className="text-xl font-black text-slate-900">Why Ship with Vanguard Freight?</h3>
+                            <h3 className="text-xl font-black text-slate-900">Why Ship with Transworld Logistics?</h3>
 
                             <div className="space-y-6">
                                 {[

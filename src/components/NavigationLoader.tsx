@@ -69,7 +69,7 @@ function LoaderContent() {
             <Navigation size={12} className="text-emerald-700 absolute transform rotate-45" />
           </div>
           <div>
-            <p className="font-extrabold text-xs text-slate-900 tracking-tight">Vanguard Freight & Cargo</p>
+            <p className="font-extrabold text-xs text-slate-900 tracking-tight">Transworld Logistics</p>
             <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider animate-pulse">Loading...</p>
           </div>
         </div>

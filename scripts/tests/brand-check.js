@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 
-console.log("--- TRANSGLOLOGISTICS BRAND CONSISTENCY CHECK ---");
+console.log("--- TRANSWORLD LOGISTICS BRAND CONSISTENCY CHECK ---");
 
 try {
     console.log("Scanning for legacy 'NexusTrack' nomenclature...");

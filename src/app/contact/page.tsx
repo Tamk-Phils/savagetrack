@@ -19,7 +19,7 @@ export default function ContactPage() {
             <div className="bg-slate-900 text-white py-16 mb-16 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-4">
                     <span className="text-xs font-black uppercase tracking-widest text-emerald-400">24/7 GLOBAL SUPPORT</span>
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tight">Contact Vanguard Freight & Cargo</h1>
+                    <h1 className="text-4xl md:text-6xl font-black tracking-tight">Contact Transworld Logistics</h1>
                     <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-medium">
                         Our team is here to help you with anything you need. Whether you have a question about consignment tracking or custom cargo quotes.
                     </p>
@@ -35,8 +35,8 @@ export default function ContactPage() {
                         </div>
                         <span className="text-xs font-black uppercase tracking-wider text-slate-400">EMAIL SUPPORT</span>
                         <h3 className="text-xl font-black text-slate-900">Official Email</h3>
-                        <a href="mailto:support@vanguardfreight.com" className="text-emerald-700 font-extrabold text-sm block hover:underline break-all">
-                            support@vanguardfreight.com
+                        <a href="mailto:supportdesk@transworldlogististics.org" className="text-emerald-700 font-extrabold text-sm block hover:underline break-all">
+                            supportdesk@transworldlogististics.org
                         </a>
                     </div>
 
@@ -92,7 +92,7 @@ export default function ContactPage() {
                         {submitted ? (
                             <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-8 rounded-2xl text-center space-y-3">
                                 <h3 className="text-2xl font-black">Message Received!</h3>
-                                <p className="text-sm font-medium">Thank you for reaching out to Vanguard Freight & Cargo. Our support team will get back to you shortly.</p>
+                                <p className="text-sm font-medium">Thank you for reaching out to Transworld Logistics. Our support team will get back to you shortly.</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-6">

@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 import { supabase } from '../../src/lib/supabase';
 
 async function runDatabaseTests() {
-    console.log("--- TRANSGLOLOGISTICS DATABASE TEST PROTOCOL ---");
+    console.log("--- TRANSWORLD LOGISTICS DATABASE TEST PROTOCOL ---");
     
     console.log(`Uplink URL: ${process.env.NEXT_PUBLIC_SUPABASE_URL}`);
 

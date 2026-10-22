@@ -52,7 +52,7 @@ export default function LoginPage() {
                         <h2 className="text-2xl font-black uppercase tracking-tighter leading-[0.9]">ESTABLISH <br/><span className="text-primary">UPLINK</span></h2>
                     </div>
                     <div className="relative z-10 pt-10 border-t border-white/10">
-                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">VANGUARD FREIGHT</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">TRANSWORLD LOGISTICS</p>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-slate-50 border border-slate-200 rounded-sm py-5 px-6 pl-14 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-bold text-slate-900 text-sm outline-none"
-                                    placeholder="user@vanguardfreight.com"
+                                    placeholder="user@transworldlogististics.org"
                                 />
                                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
                             </div>

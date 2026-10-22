@@ -13,7 +13,7 @@ export default function TrackingPage() {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2000"
-                        alt="Vanguard Freight Satellite Tracking"
+                        alt="Transworld Logistics Satellite Tracking"
                         fill
                         priority
                         className="object-cover object-center opacity-20"
@@ -24,7 +24,7 @@ export default function TrackingPage() {
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center space-y-4">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-700/90 text-white font-bold text-xs uppercase tracking-wider shadow-md">
                         <Radar size={14} className="text-white animate-pulse" />
-                        VANGUARD FREIGHT LIVE SATELLITE RADAR
+                        TRANSWORLD LOGISTICS LIVE SATELLITE RADAR
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black tracking-tight">Real Time Parcel Tracking</h1>
                     <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-medium">
