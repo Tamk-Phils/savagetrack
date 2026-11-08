@@ -26,8 +26,8 @@ export default function ShipmentsList() {
         status: "Pending",
         location: "",
         description: "",
-        lat: 52.5200,
-        lng: 13.4050
+        lat: 32.7767,
+        lng: -96.7970
     });
 
     const handleCopy = (id: string) => {
@@ -122,10 +122,10 @@ export default function ShipmentsList() {
         setEditingShipment(shipment);
         setNewUpdate({
             status: shipment.current_status || "Pending",
-            location: "",
+            location: shipment.updates?.[0]?.location || shipment.origin || "",
             description: "",
-            lat: shipment.latitude || 32.7767,
-            lng: shipment.longitude || -96.7970
+            lat: shipment.latitude || shipment.origin_lat || 32.7767,
+            lng: shipment.longitude || shipment.origin_lng || -96.7970
         });
         setIsModalOpen(true);
     };

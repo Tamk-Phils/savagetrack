@@ -104,7 +104,7 @@ export default function QuotePage() {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">Origin City / Hub</label>
-                                                <input type="text" placeholder="e.g. Frankfurt, Germany" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-700 transition-colors" required />
+                                                <input type="text" placeholder="e.g. Dallas, TX or London, UK" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-700 transition-colors" required />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-extrabold uppercase tracking-wider text-slate-700">Destination Hub</label>

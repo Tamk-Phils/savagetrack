@@ -71,13 +71,14 @@ export default function AddShipment() {
 
         const newShipment = {
             ...formData,
+            is_deleted: false,
             destination: formData.destination || formData.recipient_address,
-            origin_lat: originCoords ? originCoords[0] : undefined,
-            origin_lng: originCoords ? originCoords[1] : undefined,
+            origin_lat: originCoords ? originCoords[0] : (formData.latitude || 32.7767),
+            origin_lng: originCoords ? originCoords[1] : (formData.longitude || -96.7970),
             destination_lat: destCoords ? destCoords[0] : undefined,
             destination_lng: destCoords ? destCoords[1] : undefined,
-            latitude: originCoords ? originCoords[0] : undefined,
-            longitude: originCoords ? originCoords[1] : undefined,
+            latitude: originCoords ? originCoords[0] : (formData.latitude || 32.7767),
+            longitude: originCoords ? originCoords[1] : (formData.longitude || -96.7970),
             weight: parseFloat(formData.weight) || 0,
             estimated_delivery: formData.estimated_delivery ? new Date(formData.estimated_delivery).toISOString() : null,
             created_at: new Date().toISOString(),
@@ -102,10 +103,11 @@ export default function AddShipment() {
                 console.warn("Supabase insert warning, falling back to local database:", sbError);
             }
 
-            // Always ensure local cache storage copy exists
-            const existingRaw = localStorage.getItem("transworldlogistics_shipments") || localStorage.getItem("transworldlogistics_shipments");
-            const existing: any[] = existingRaw ? JSON.parse(existingRaw) : [];
-            existing.push({ ...newShipment, id: Math.random().toString(36).substr(2, 9) });
+            // Always ensure local cache storage copy exists and remove any older/simulated copy
+            const existingRaw = localStorage.getItem("transworldlogistics_shipments");
+            let existing: any[] = existingRaw ? JSON.parse(existingRaw) : [];
+            existing = existing.filter(s => s.tracking_number.toLowerCase() !== formData.tracking_number.toLowerCase());
+            existing.unshift({ ...newShipment, id: Math.random().toString(36).substr(2, 9) });
             localStorage.setItem("transworldlogistics_shipments", JSON.stringify(existing));
 
             if (formData.recipient_email) {

@@ -47,7 +47,7 @@ export function getCoordsFromLocationName(name?: string): [number, number] | nul
     const clean = name.trim().toLowerCase();
     
     for (const key in KNOWN_LOCATIONS) {
-        if (clean.includes(key) || key.includes(clean)) {
+        if (clean === key || clean.includes(key)) {
             return KNOWN_LOCATIONS[key];
         }
     }

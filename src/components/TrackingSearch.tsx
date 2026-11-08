@@ -78,24 +78,24 @@ export default function TrackingSearch() {
             id: uppercaseCode,
             tracking_number: uppercaseCode,
             current_status: "In Delivery",
-            origin: "Frankfurt Hub, Germany",
-            destination: "JFK Airport, New York, USA",
-            sender_name: "Global Logistics Freight Corp",
-            sender_email: "supportdesk@transworldlogistics.org",
-            recipient_name: "Robert Vance & Partners",
-            recipient_email: "r.vance@vanceglobal.com",
-            recipient_address: "350 Fifth Avenue, Suite 4200, New York, NY 10118",
-            description: "Express Air Freight - Priority Express Parcel & Documents",
-            weight: 18.5,
-            item_type: "AIR EXPORT CARGO",
+            origin: "Regional Dispatch Hub",
+            destination: "Destination Distribution Center",
+            sender_name: "Logistics Fulfillment Center",
+            sender_email: "dispatch@transworldlogistics.org",
+            recipient_name: "Consignee On File",
+            recipient_email: "client@transworldlogistics.org",
+            recipient_address: "Delivery Address Verified On File",
+            description: "General Cargo - Standard Freight Telemetry Active",
+            weight: 15.0,
+            item_type: "General Cargo",
             payment_status: "Paid",
             estimated_delivery: new Date(Date.now() + 86400000 * 2).toISOString(),
-            latitude: 40.6413,
-            longitude: -73.7781,
-            origin_lat: 50.1109,
-            origin_lng: 8.6821,
-            destination_lat: 40.6413,
-            destination_lng: -73.7781,
+            latitude: 40.7128,
+            longitude: -74.0060,
+            origin_lat: 32.7767,
+            origin_lng: -96.7970,
+            destination_lat: 40.7128,
+            destination_lng: -74.0060,
             is_deleted: false,
             created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
             updated_at: new Date().toISOString(),
@@ -104,24 +104,24 @@ export default function TrackingSearch() {
                     id: "u1",
                     shipment_id: uppercaseCode,
                     status: "In Delivery",
-                    location: "JFK International Freight Terminal",
-                    description: "Package arrived at regional sorting hub. Assigned to Transworld Logistics Express Air Network.",
+                    location: "Regional Sorting Facility",
+                    description: "Package arrived at regional sorting hub. Assigned to standard express transit network.",
                     created_at: new Date(Date.now() - 3600000 * 3).toISOString()
                 },
                 {
                     id: "u2",
                     shipment_id: uppercaseCode,
-                    status: "Customs Cleared",
-                    location: "Frankfurt International Hub",
-                    description: "Export documentation verified and cleared by customs authority.",
+                    status: "Customs & Security Cleared",
+                    location: "Transit Operations Gateway",
+                    description: "Export documentation and security screening verified.",
                     created_at: new Date(Date.now() - 3600000 * 22).toISOString()
                 },
                 {
                     id: "u3",
                     shipment_id: uppercaseCode,
                     status: "Dispatch Processed",
-                    location: "Frankfurt Gateway",
-                    description: "Package logged into Transworld Logistics satellite tracking system.",
+                    location: "Central Freight Terminal",
+                    description: "Package received and registered into real-time tracking network.",
                     created_at: new Date(Date.now() - 3600000 * 48).toISOString()
                 }
             ]
@@ -138,23 +138,33 @@ export default function TrackingSearch() {
 
         let found: Shipment | null = null;
 
-        // 1. Try Supabase with short 2s timeout
+        // 1. Try Supabase with 8s timeout to accommodate cold starts and mobile connections
         try {
             const queryPromise = supabase
                 .from('shipments')
                 .select('*')
                 .ilike('tracking_number', cleanQuery)
-                .eq('is_deleted', false)
+                .or('is_deleted.is.null,is_deleted.eq.false')
                 .maybeSingle();
 
             const timeoutPromise = new Promise<{ data: any, error: any }>((resolve) =>
-                setTimeout(() => resolve({ data: null, error: new Error("Timeout") }), 2000)
+                setTimeout(() => resolve({ data: null, error: new Error("Timeout") }), 8000)
             );
 
             const { data, error: sbError } = await Promise.race([queryPromise, timeoutPromise]);
 
             if (!sbError && data) {
                 found = data as Shipment;
+                // Update local storage cache with genuine Supabase record and wipe any stale simulated data
+                if (typeof window !== "undefined") {
+                    try {
+                        const saved = localStorage.getItem("transworldlogistics_shipments");
+                        let localShipments: Shipment[] = saved ? JSON.parse(saved) : [];
+                        localShipments = localShipments.filter(s => s.tracking_number.toLowerCase() !== cleanQuery.toLowerCase());
+                        localShipments.unshift(found);
+                        localStorage.setItem("transworldlogistics_shipments", JSON.stringify(localShipments));
+                    } catch {}
+                }
             }
         } catch (err) {
             console.warn("Supabase query bypassed:", err);
@@ -163,14 +173,19 @@ export default function TrackingSearch() {
         // 2. Try LocalStorage
         if (!found && typeof window !== "undefined") {
             try {
-                const saved = localStorage.getItem("transworldlogistics_shipments") || localStorage.getItem("transworldlogistics_shipments");
+                const saved = localStorage.getItem("transworldlogistics_shipments");
                 if (saved) {
                     const localShipments: Shipment[] = JSON.parse(saved);
                     const match = localShipments.find(s =>
                         s.tracking_number.toLowerCase() === cleanQuery.toLowerCase() && !s.is_deleted
                     );
                     if (match) {
-                        found = match;
+                        // Ignore any stale simulated records that were hardcoded to Germany
+                        const isStaleGermany = (match.origin && match.origin.toLowerCase().includes("germany")) ||
+                            (match.updates && match.updates.some((u: any) => u.location && u.location.toLowerCase().includes("frankfurt")));
+                        if (!isStaleGermany) {
+                            found = match;
+                        }
                     }
                 }
             } catch (e) {
@@ -178,21 +193,9 @@ export default function TrackingSearch() {
             }
         }
 
-        // 3. Guaranteed Fallback: Generate real-time simulated telemetry details for any tracking input
+        // 3. Fallback: Generate real-time simulated telemetry details for unlisted tracking input
         if (!found) {
             found = generateSimulatedShipment(cleanQuery);
-            if (typeof window !== "undefined") {
-                try {
-                    const saved = localStorage.getItem("transworldlogistics_shipments");
-                    const localShipments: Shipment[] = saved ? JSON.parse(saved) : [];
-                    if (!localShipments.some(s => s.tracking_number.toLowerCase() === cleanQuery.toLowerCase())) {
-                        localShipments.push(found);
-                        localStorage.setItem("transworldlogistics_shipments", JSON.stringify(localShipments));
-                    }
-                } catch (e) {
-                    // quota ignore
-                }
-            }
         }
 
         setResult(found);
