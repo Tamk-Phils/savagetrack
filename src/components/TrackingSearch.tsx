@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Component, ReactNode, useState } from "react";
-import { Package, MapPin, AlertCircle, User, FileText, Mail, Copy, Check, ChevronRight, Zap, Download, Sparkles, Clock, Truck, ShieldCheck, Headphones, Bell, Globe, ChevronDown, Navigation } from "lucide-react";
+import { Package, MapPin, AlertCircle, User, FileText, Mail, Copy, Check, ChevronRight, Zap, Download, Sparkles, Clock, Truck, ShieldCheck, Headphones, Bell, Globe, ChevronDown, Navigation, Phone, Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Shipment, ShipmentUpdate } from "@/types";
@@ -129,7 +129,7 @@ export default function TrackingSearch() {
     };
 
     const performSearch = async (query: string) => {
-        const cleanQuery = query.trim();
+        const cleanQuery = query.trim().replace(/^[#\s]+/, '').replace(/\s+/g, '');
         if (!cleanQuery) return;
 
         setIsSearching(true);
@@ -138,7 +138,7 @@ export default function TrackingSearch() {
 
         let found: Shipment | null = null;
 
-        // 1. Try Supabase with 8s timeout to accommodate cold starts and mobile connections
+        // 1. Try Supabase with 10s timeout to accommodate cold starts and mobile connections
         try {
             const queryPromise = supabase
                 .from('shipments')
@@ -148,7 +148,7 @@ export default function TrackingSearch() {
                 .maybeSingle();
 
             const timeoutPromise = new Promise<{ data: any, error: any }>((resolve) =>
-                setTimeout(() => resolve({ data: null, error: new Error("Timeout") }), 8000)
+                setTimeout(() => resolve({ data: null, error: new Error("Timeout") }), 10000)
             );
 
             const { data, error: sbError } = await Promise.race([queryPromise, timeoutPromise]);
@@ -180,10 +180,13 @@ export default function TrackingSearch() {
                         s.tracking_number.toLowerCase() === cleanQuery.toLowerCase() && !s.is_deleted
                     );
                     if (match) {
-                        // Ignore any stale simulated records that were hardcoded to Germany
-                        const isStaleGermany = (match.origin && match.origin.toLowerCase().includes("germany")) ||
+                        // Ignore any stale simulated/dummy records
+                        const isDummy = match.recipient_name === "Consignee On File" ||
+                            match.sender_name === "Logistics Fulfillment Center" ||
+                            match.origin === "Regional Dispatch Hub" ||
+                            (match.origin && match.origin.toLowerCase().includes("germany")) ||
                             (match.updates && match.updates.some((u: any) => u.location && u.location.toLowerCase().includes("frankfurt")));
-                        if (!isStaleGermany) {
+                        if (!isDummy) {
                             found = match;
                         }
                     }
@@ -193,9 +196,11 @@ export default function TrackingSearch() {
             }
         }
 
-        // 3. Fallback: Generate real-time simulated telemetry details for unlisted tracking input
+        // 3. Fallback: If still not found, notify user clearly rather than showing fake consignee data
         if (!found) {
-            found = generateSimulatedShipment(cleanQuery);
+            setError(`No consignment or dispatch record found for tracking number "${cleanQuery}". Please check your Consignment No. and try again.`);
+            setIsSearching(false);
+            return;
         }
 
         setResult(found);
@@ -413,9 +418,21 @@ export default function TrackingSearch() {
                                             </div>
                                             <p className="text-xs text-slate-400 font-medium">NAME</p>
                                             <p className="text-slate-900 font-bold text-base break-words">{result.sender_name || 'N/A'}</p>
-                                            <p className="text-slate-500 text-xs flex items-center gap-2 pt-1 min-w-0">
-                                                <Mail size={13} className="text-emerald-600 shrink-0" />
-                                                <span className="break-all font-medium">{result.sender_email || 'N/A'}</span>
+                                            {result.sender_email && (
+                                                <p className="text-slate-500 text-xs flex items-center gap-2 pt-1 min-w-0">
+                                                    <Mail size={13} className="text-emerald-600 shrink-0" />
+                                                    <span className="break-all font-medium">{result.sender_email}</span>
+                                                </p>
+                                            )}
+                                            {result.sender_phone && (
+                                                <p className="text-slate-500 text-xs flex items-center gap-2 pt-0.5 min-w-0">
+                                                    <Phone size={13} className="text-emerald-600 shrink-0" />
+                                                    <span className="break-all font-medium">{result.sender_phone}</span>
+                                                </p>
+                                            )}
+                                            <p className="text-slate-500 text-xs flex items-center gap-2 pt-0.5 min-w-0">
+                                                <MapPin size={13} className="text-emerald-600 shrink-0" />
+                                                <span className="font-semibold text-slate-700">Origin: {result.origin || 'Origin Station'}</span>
                                             </p>
                                         </div>
 
@@ -426,18 +443,42 @@ export default function TrackingSearch() {
                                             <p className="text-xs text-slate-400 font-medium">RECIPIENT NAME</p>
                                             <p className="text-slate-900 font-bold text-base break-words">{result.recipient_name || 'N/A'}</p>
                                             <p className="text-slate-600 text-xs leading-relaxed pt-1 font-medium break-words">
-                                                {result.recipient_address || 'Address registered'}
+                                                {result.recipient_address || 'Address registered on file'}
+                                            </p>
+                                            {result.recipient_email && (
+                                                <p className="text-slate-500 text-xs flex items-center gap-2 pt-1 min-w-0">
+                                                    <Mail size={13} className="text-emerald-600 shrink-0" />
+                                                    <span className="break-all font-medium">{result.recipient_email}</span>
+                                                </p>
+                                            )}
+                                            {result.recipient_phone && (
+                                                <p className="text-slate-500 text-xs flex items-center gap-2 pt-0.5 min-w-0">
+                                                    <Phone size={13} className="text-emerald-600 shrink-0" />
+                                                    <span className="break-all font-medium">{result.recipient_phone}</span>
+                                                </p>
+                                            )}
+                                            <p className="text-slate-500 text-xs flex items-center gap-2 pt-0.5 min-w-0">
+                                                <MapPin size={13} className="text-emerald-600 shrink-0" />
+                                                <span className="font-semibold text-slate-700">Destination: {result.destination || 'Destination Station'}</span>
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                                    <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
                                         <div className="flex items-center gap-2 text-slate-700 text-xs font-bold uppercase tracking-wider">
                                             <FileText size={15} className="text-emerald-700" /> Package Description & Content
                                         </div>
-                                        <p className="text-slate-600 text-sm leading-relaxed">
+                                        <p className="text-slate-800 text-sm font-semibold leading-relaxed whitespace-pre-line">
                                             {result.description || 'Standard high-value express shipment parcel.'}
                                         </p>
+                                        {result.special_notes && (
+                                            <div className="pt-2 border-t border-slate-200/60 flex items-center gap-2 text-xs">
+                                                <span className="font-bold text-slate-500 uppercase text-[10px]">Handling Notes:</span>
+                                                <span className="px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 font-bold text-xs">
+                                                    {result.special_notes}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -449,16 +490,34 @@ export default function TrackingSearch() {
                                         <div className="space-y-3 text-xs">
                                             <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
                                                 <span className="text-slate-500 font-medium">WEIGHT</span>
-                                                <span className="text-slate-900 font-bold">{result.weight} LBS</span>
+                                                <span className="text-slate-900 font-bold">{result.weight ? `${result.weight} LBS` : 'N/A'}</span>
                                             </div>
                                             <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
                                                 <span className="text-slate-500 font-medium">SERVICE TYPE</span>
-                                                <span className="text-emerald-700 font-bold">{result.item_type || 'EXPRESS'}</span>
+                                                <span className="text-emerald-700 font-bold">{result.service_level || result.item_type || 'General Cargo'}</span>
                                             </div>
+                                            {result.carrier && (
+                                                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                                                    <span className="text-slate-500 font-medium">CARRIER</span>
+                                                    <span className="text-slate-900 font-bold">{result.carrier}</span>
+                                                </div>
+                                            )}
+                                            {result.dimensions && (
+                                                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                                                    <span className="text-slate-500 font-medium">DIMENSIONS</span>
+                                                    <span className="text-slate-900 font-bold">{result.dimensions} IN</span>
+                                                </div>
+                                            )}
+                                            {result.quantity && (
+                                                <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
+                                                    <span className="text-slate-500 font-medium">PIECES / COUNT</span>
+                                                    <span className="text-slate-900 font-bold">{result.quantity}</span>
+                                                </div>
+                                            )}
                                             <div className="flex justify-between items-center pb-2 border-b border-slate-200/60">
                                                 <span className="text-slate-500 font-medium">ESTIMATED DELIVERY</span>
                                                 <span className="text-slate-900 font-bold">
-                                                    {result.estimated_delivery ? new Date(result.estimated_delivery).toLocaleDateString() : 'TBD'}
+                                                    {result.estimated_delivery ? new Date(result.estimated_delivery).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'TBD'}
                                                 </span>
                                             </div>
                                             <div className="flex justify-between items-center">
@@ -467,12 +526,18 @@ export default function TrackingSearch() {
                                                     {result.payment_status || 'PAID'}
                                                 </span>
                                             </div>
+                                            {result.payment_method && (
+                                                <div className="flex justify-between items-center pt-2 border-t border-slate-200/60">
+                                                    <span className="text-slate-500 font-medium">PAYMENT METHOD</span>
+                                                    <span className="text-slate-700 font-bold">{result.payment_method}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
                                     <button 
                                         onClick={() => window.print()} 
-                                        className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all"
+                                        className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                                     >
                                         <Download size={15} /> Download Waybill PDF
                                     </button>
